@@ -1,5 +1,6 @@
 
 // Arrow Length Multipliers
+drawArrows = false; // Button edit
 arrowMult = 1;
 
 // Canvas Context
@@ -33,14 +34,16 @@ function updateData() {
 	data.innerHTML += "<br>\n";
 	data.innerHTML += "# Bodies: "+bods.N+"<br/>\n";
 	data.innerHTML += "# Force calcuations per step: "+numChecks+"\n";
-	data.innerHTML += "<ul>";
-	var i;
-	for(i=0;i<bods.N;i++){
-		data.innerHTML += "<li> B"+i+" : Pos "+
-			bods.pos.x[i].toFixed(2)+", "+bods.pos.y[i].toFixed(2)+
-			" </li>";
+	if (DEBUG) {
+		data.innerHTML += "<ul>";
+		var i;
+		for(i=0;i<bods.N;i++){
+			data.innerHTML += "<li> B"+i+" : Pos "+
+				bods.pos.x[i].toFixed(2)+", "+bods.pos.y[i].toFixed(2)+
+				" </li>";
+		}
+		data.innerHTML += "</ul>";
 	}
-	data.innerHTML += "</ul>";
 }
 
 // Updates graphics in Canvas
@@ -58,15 +61,17 @@ function refreshGraphics() {
 	for(i=0;i<bods.N;i++){
 		drawCircle(bods.pos.x[i],bods.pos.y[i],massToRadius(bods.mass[i]));
 		// Velocity arrow (Green)
-		drawArrow(bods.pos.x[i],
-			bods.pos.y[i],
-			bods.pos.x[i]+bods.vel.x[i],
-			bods.pos.y[i]+bods.vel.y[i],'',"#0f0");
-		// Acceleration arrow (Red)
-		drawArrow(bods.pos.x[i],
-			bods.pos.y[i],
-			bods.pos.x[i]+bods.acc.x[i],
-			bods.pos.y[i]+bods.acc.y[i],5,"#f00");
+		if (drawArrows) {
+			drawArrow(bods.pos.x[i],
+				bods.pos.y[i],
+				bods.pos.x[i]+bods.vel.x[i],
+				bods.pos.y[i]+bods.vel.y[i],'',"#0f0");
+			// Acceleration arrow (Red)
+			drawArrow(bods.pos.x[i],
+				bods.pos.y[i],
+				bods.pos.x[i]+bods.acc.x[i],
+				bods.pos.y[i]+bods.acc.y[i],5,"#f00");
+		}
 		com.x += bods.pos.x[i]*bods.mass[i];
 		com.y += bods.pos.y[i]*bods.mass[i];
 		allMass += bods.mass[i];
