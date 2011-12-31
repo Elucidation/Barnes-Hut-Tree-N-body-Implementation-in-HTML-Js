@@ -1,9 +1,10 @@
 ////////////
-var MINMASS = 10;
-var MAXMASS = 100;
-var G = 1000; // Gravitational Constant
+var MINMASS = 1e2;
+var MAXMASS = 1e4;
+var G = 1; // Gravitational Constant
 var ETA = 10; // Softening constant
-var GFACTOR = 2; // Higher means distance has more effect (3 is reality)
+var GFACTOR = 1.3; // Higher means distance has more effect (3 is reality)
+var DRAGFACTOR = 0.9999; 
 
 // Bodies struct containing all bodies
 bods = {pos:{x:new Array(),y:new Array()},
@@ -39,17 +40,18 @@ function addBody(x,y,vx,vy,m) {
 	}
 }
 
+var numChecks;
 // Set accelerations of bodies based on gravity
 function doForces() {
 	//console.log("Doing forces");
 	var i,j;
-	var numChecks = 0;
 	// Zero accelerations
 	for (i=0;i<bods.N;i++) {
 		bods.acc.x[i]=0;
 		bods.acc.y[i]=0;
 	}
 	var dx,dy,r,F,fx,fy;
+	numChecks = 0;
 	for (i=0;i<bods.N;i++) {
 		for (j=i+1;j<bods.N;j++) {
 			dx = bods.pos.x[j]-bods.pos.x[i];
@@ -65,13 +67,13 @@ function doForces() {
 			bods.acc.x[j] -= fx/bods.mass[j];
 			bods.acc.y[j] -= fy/bods.mass[j];
 
-			if (DEBUG) {
+			if (DEBUG==2) {
 				console.log("B",i," <-> B",j," : ",F);
 			}
 			numChecks += 1;
 		}
 	}
-	if (DEBUG) {
+	if (DEBUG==2) {
 		console.log("Force Checks: ",numChecks);
 	}
 }
@@ -85,13 +87,18 @@ function step() {
 		// Update body positions based on velocities
 		bods.pos.x[i] += bods.vel.x[i]*dt;
 		bods.pos.y[i] += bods.vel.y[i]*dt;
+
+		// apply drag slowdown on velocities
+		bods.vel.x[i] *= DRAGFACTOR;
+		bods.vel.y[i] *= DRAGFACTOR;
+
 		// Update body velocities based on accelerations
 		bods.vel.x[i] += bods.acc.x[i]*dt;
 		bods.vel.y[i] += bods.acc.y[i]*dt;
 	}
 
 	T += dt;
-	if (DEBUG) {
+	if (DEBUG==2) {
 	    console.log("STEP");
 	}
 	refreshGraphics();

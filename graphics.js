@@ -1,6 +1,6 @@
 
 // Arrow Length Multipliers
-arrowMult = 2;
+arrowMult = 1;
 
 // Canvas Context
 var c;
@@ -31,7 +31,8 @@ function updateData() {
 		data.innerHTML += ("System <b>Stopped/Paused</b>");
 	}
 	data.innerHTML += "<br>\n";
-	data.innerHTML += "Bods: "+bods.N+"\n";
+	data.innerHTML += "# Bodies: "+bods.N+"<br/>\n";
+	data.innerHTML += "# Force calcuations per step: "+numChecks+"\n";
 	data.innerHTML += "<ul>";
 	var i;
 	for(i=0;i<bods.N;i++){
@@ -96,12 +97,12 @@ function drawBox(x,y,w,h) {
 function drawCircle(x,y,r) {
 	c.strokeStyle = '#f00';
 	c.fillStyle = '#fff';
-	c.lineWidth = "1.5";
+	c.lineWidth = "1";
 	c.beginPath();
 	c.arc(x,y,r,0,Math.PI*2,true); 
 	c.closePath();
 	c.stroke();
-	c.fill();
+	//c.fill();
 }
 
 // Arrow
