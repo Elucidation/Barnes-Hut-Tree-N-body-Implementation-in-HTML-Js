@@ -53,6 +53,7 @@ function refreshGraphics() {
 	}
 
 	com = {x:0,y:0}; // Center of mass of sys
+	var allMass = 0;
 
 	for(i=0;i<bods.N;i++){
 		drawCircle(bods.pos.x[i],bods.pos.y[i],massToRadius(bods.mass[i]));
@@ -66,13 +67,14 @@ function refreshGraphics() {
 			bods.pos.y[i],
 			bods.pos.x[i]+bods.acc.x[i],
 			bods.pos.y[i]+bods.acc.y[i],5,"#f00");
-		com.x += bods.pos.x[i];
-		com.y += bods.pos.y[i];
+		com.x += bods.pos.x[i]*bods.mass[i];
+		com.y += bods.pos.y[i]*bods.mass[i];
+		allMass += bods.mass[i];
 	}
 
 	// Draw Center of Mass
-	com.x /= bods.N;
-	com.y /= bods.N;
+	com.x /= allMass;
+	com.y /= allMass;
 	drawCross(com.x,com.y);
 
 	updateData();
