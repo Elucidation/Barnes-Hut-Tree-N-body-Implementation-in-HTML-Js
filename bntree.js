@@ -49,14 +49,17 @@ function step() {
 }
 
 var sysTimer;
+var sysRunning = false;
 function startSys() {
-	sysTimer = setInterval(step,10)
+	sysTimer = setInterval(step,10);
+	sysRunning = true;
 	if (DEBUG) {
 	    console.log("START SYSTEM ",T,"s");
 	}
 }
 function pauseSys() {
 	clearInterval(sysTimer);
+	sysRunning = false;
 	if (DEBUG) {
 	    console.log("STOP SYSTEM ",T,"s");
 	}

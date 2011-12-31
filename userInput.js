@@ -85,6 +85,13 @@ function doKeyDown(evt){
 				dragm -= MASS_STEP;
 			}
 			break;
+		case 80:  /* p key was pressed */
+			if (DEBUG) {
+				console.log("'p' key pressed");
+			}
+			if (sysRunning){ pauseSys(); } 
+			else { startSys(); }
+			break;
 		// case 37:  /* Left arrow was pressed */
 		// 	if (x - dx > 0){
 		// 		x -= dx;

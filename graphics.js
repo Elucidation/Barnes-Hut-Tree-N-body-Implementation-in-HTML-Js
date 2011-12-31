@@ -16,7 +16,15 @@ function initGraphics(canvasId,dataId){
 
 // Updates text on html page
 function updateData() {
-	data.innerHTML = ("Bods: "+bods.N);
+	data.innerHTML = "";
+	if (sysRunning) {
+		data.innerHTML += ("System <b>Running</b>");
+	} 
+	else {
+		data.innerHTML += ("System <b>Stopped/Paused</b>");
+	}
+	data.innerHTML += "<br>\n";
+	data.innerHTML += "Bods: "+bods.N+"\n";
 	data.innerHTML += "<ul>";
 	var i;
 	for(i=0;i<bods.N;i++){
@@ -36,13 +44,22 @@ function refreshGraphics() {
 		drawArrow(dragx,dragy,dragx2,dragy2);
 	}
 
+	com = {x:0,y:0}; // Center of mass of sys
+
 	for(i=0;i<bods.N;i++){
 		drawCircle(bods.pos.x[i],bods.pos.y[i],massToRadius(bods.mass[i]));
 		drawArrow(bods.pos.x[i],
 			bods.pos.y[i],
 			bods.pos.x[i]+bods.vel.x[i],
 			bods.pos.y[i]+bods.vel.y[i]);
+		com.x += bods.pos.x[i];
+		com.y += bods.pos.y[i];
 	}
+
+	// Draw Center of Mass
+	com.x /= bods.N;
+	com.y /= bods.N;
+	drawCross(com.x,com.y);
 
 	updateData();
 }
@@ -101,4 +118,20 @@ function drawArrow(x,y,x2,y2,h) {
     c.lineTo(x2,y2);
     c.closePath();
     c.fill();
+}
+
+// h = cross line width
+function drawCross(x,y,h) {
+	h = typeof(h) != 'undefined' ? h : 10; // Default h
+	c.strokeStyle = '#00f';
+	c.lineWidth = "1";
+
+	// Lines
+	c.beginPath();
+	c.moveTo(x-h/2,y);
+	c.lineTo(x+h/2,y);
+	c.moveTo(x,y-h/2);
+	c.lineTo(x,y+h/2);
+	c.closePath();
+    c.stroke();
 }
