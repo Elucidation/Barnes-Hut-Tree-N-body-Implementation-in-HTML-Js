@@ -112,8 +112,8 @@ function drawArrow(x,y,x2,y2,h,color) {
 	color = typeof(color) != 'undefined' ? color : '#0f0'; // Default color
 	var angle = Math.atan2(y2-y,x2-x);
 
-	x2 = x2 + (x2-x)*arrowMult;
-	y2 = y2 + (y2-y)*arrowMult;
+	x2 = x + (x2-x)*arrowMult;
+	y2 = y + (y2-y)*arrowMult;
 
 	c.strokeStyle = color;
 	c.fillStyle = color;
