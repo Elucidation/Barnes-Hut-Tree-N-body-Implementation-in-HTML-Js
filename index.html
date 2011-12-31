@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<h2>Barnes-Hut Implementation in HTML/Javascript</h2>
 <p>Here it is.</p>
 <p>Click to place body<br/>
 Drag to set velocity of body<br/>
@@ -35,8 +36,8 @@ No collision checks
 			</td></tr>
 			<tr>
 			<td>0.0001</td>
-			<td><input type="range" min="-4" max="-1" value="-2" step=0.5 onchange="setDT(this.value)" /></td>
-			<td>0</td>
+			<td><input type="range" min="-4" max="1" value="-2" step=0.1 onchange="setDT(this.value)" /></td>
+			<td>10</td>
 			</tr>
 			</table>
 			<script type="text/javascript">
@@ -54,7 +55,7 @@ No collision checks
 </table>
 
 <script>
-DEBUG = true; // Extra info in console
+DEBUG = false; // Extra info in console
 initBN("bnCanvas");
 initGraphics("bnCanvas","data");
 initUI("bnCanvas");

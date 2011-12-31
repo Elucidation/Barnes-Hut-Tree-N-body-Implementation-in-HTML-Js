@@ -1,4 +1,11 @@
+
+// Arrow Length Multipliers
+arrowMult = 2;
+
+// Canvas Context
 var c;
+
+
 function initGraphics(canvasId,dataId){
 	canvasElement = document.getElementById(canvasId);
 	c = canvasElement.getContext("2d");
@@ -48,10 +55,16 @@ function refreshGraphics() {
 
 	for(i=0;i<bods.N;i++){
 		drawCircle(bods.pos.x[i],bods.pos.y[i],massToRadius(bods.mass[i]));
+		// Velocity arrow (Green)
 		drawArrow(bods.pos.x[i],
 			bods.pos.y[i],
 			bods.pos.x[i]+bods.vel.x[i],
-			bods.pos.y[i]+bods.vel.y[i]);
+			bods.pos.y[i]+bods.vel.y[i],'',"#0f0");
+		// Acceleration arrow (Red)
+		drawArrow(bods.pos.x[i],
+			bods.pos.y[i],
+			bods.pos.x[i]+bods.acc.x[i],
+			bods.pos.y[i]+bods.acc.y[i],5,"#f00");
 		com.x += bods.pos.x[i];
 		com.y += bods.pos.y[i];
 	}
@@ -94,12 +107,16 @@ function drawCircle(x,y,r) {
 // Arrow
 // x,y start to x2,y2 end
 // h = Arrow Head size
-function drawArrow(x,y,x2,y2,h) {
-	h = typeof(h) != 'undefined' ? h : 10; // Default h
+function drawArrow(x,y,x2,y2,h,color) {
+	h = (typeof(h) != 'undefined' && h != '') ? h : 10; // Default h
+	color = typeof(color) != 'undefined' ? color : '#0f0'; // Default color
 	var angle = Math.atan2(y2-y,x2-x);
 
-	c.strokeStyle = '#0f0';
-	c.fillStyle = '#0f0';
+	x2 = x2 + (x2-x)*arrowMult;
+	y2 = y2 + (y2-y)*arrowMult;
+
+	c.strokeStyle = color;
+	c.fillStyle = color;
 	c.lineWidth = "0";
 
 	

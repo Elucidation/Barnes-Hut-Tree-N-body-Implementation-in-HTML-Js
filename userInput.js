@@ -46,6 +46,8 @@ function mouseMove(e) {
 		else if(e.layerX) {mouseX = e.layerX;mouseY = e.layerY;} // IE
 		dragx2 = mouseX;
 		dragy2 = mouseY;
+		dragx2 = (mouseX-dragx)/arrowMult + dragx;
+		dragy2 = (mouseY-dragy)/arrowMult + dragy;
 	}
 }
 
@@ -56,7 +58,10 @@ function mouseUp(e) {
 		var mouseX, mouseY;
 		if(e.offsetX) {mouseX = e.offsetX; mouseY = e.offsetY;}
 		else if(e.layerX) {mouseX = e.layerX;mouseY = e.layerY;} // IE
-
+		
+		mouseX = (mouseX-dragx)/arrowMult + dragx;
+		mouseY = (mouseY-dragy)/arrowMult + dragy;
+		
 		addBody(dragx,dragy,mouseX-dragx,mouseY-dragy,dragm);
 		refreshGraphics();
 	}
@@ -65,8 +70,8 @@ function mouseUp(e) {
 
 // Update mass by arrow keys while dragging
 window.addEventListener('keydown',doKeyDown,true);
-var MASS_STEP = 1;
-dragm = 1;
+var MASS_STEP = (MAXMASS-MINMASS)/10;
+dragm = (MINMASS+MAXMASS)/2;
 function doKeyDown(evt){
 	switch (evt.keyCode) {
 		case 69:  /* e was pressed */
@@ -91,6 +96,12 @@ function doKeyDown(evt){
 			}
 			if (sysRunning){ pauseSys(); } 
 			else { startSys(); }
+			break;
+		case 83:  /* s key was pressed */
+			if (DEBUG) {
+				console.log("'s' key pressed");
+			}
+			step();
 			break;
 		// case 37:  /* Left arrow was pressed */
 		// 	if (x - dx > 0){
