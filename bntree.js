@@ -4,7 +4,6 @@ var MAXMASS = 1e4;
 var G = 1; // Gravitational Constant
 var ETA = 10; // Softening constant
 var GFACTOR = 1.3; // Higher means distance has more effect (3 is reality)
-var DRAGFACTOR = 0.9999; 
 
 // Bodies struct containing all bodies
 bods = {pos:{x:new Array(),y:new Array()},
@@ -82,26 +81,48 @@ function doForces() {
 var T = 0; // current system time
 var dt = 0.01;
 function step() {
+	leapfrog();
+	T += dt;
+	if (DEBUG==2) {
+	    console.log("STEP");
+	}
+	refreshGraphics();
+}
+function forwardEuler() {
 	doForces();
 	for (i=0;i<bods.N;i++) {
 		// Update body positions based on velocities
 		bods.pos.x[i] += bods.vel.x[i]*dt;
 		bods.pos.y[i] += bods.vel.y[i]*dt;
 
-		// apply drag slowdown on velocities
-		bods.vel.x[i] *= DRAGFACTOR;
-		bods.vel.y[i] *= DRAGFACTOR;
-
 		// Update body velocities based on accelerations
 		bods.vel.x[i] += bods.acc.x[i]*dt;
 		bods.vel.y[i] += bods.acc.y[i]*dt;
 	}
+}
 
-	T += dt;
-	if (DEBUG==2) {
-	    console.log("STEP");
+function leapfrog() {
+	// Move half step
+	for (i=0;i<bods.N;i++) {
+		bods.pos.x[i] += bods.vel.x[i]*dt * 0.5;
+		bods.pos.y[i] += bods.vel.y[i]*dt * 0.5;
 	}
-	refreshGraphics();
+	// Update accelerations and velocities
+	doForces(); // Set accelerations
+	for (i=0;i<bods.N;i++) {
+		// Update body velocities based on accelerations
+		bods.vel.x[i] += bods.acc.x[i]*dt;
+		bods.vel.y[i] += bods.acc.y[i]*dt;
+	}
+	// Update body velocities based on accelerations
+		bods.vel.x[i] += bods.acc.x[i]*dt;
+		bods.vel.y[i] += bods.acc.y[i]*dt;
+
+	// Move half step
+	for (i=0;i<bods.N;i++) {
+		bods.pos.x[i] += bods.vel.x[i]*dt * 0.5;
+		bods.pos.y[i] += bods.vel.y[i]*dt * 0.5;
+	}
 }
 
 var sysTimer;
