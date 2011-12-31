@@ -4,7 +4,11 @@ function initGraphics(canvasId,dataId){
 	c = canvasElement.getContext("2d");
 	data = document.getElementById(dataId);
 
-	console.log('Initialize Graphics complete.');
+	gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
+
+	if (DEBUG) {
+		console.log('Initialize Graphics complete.');
+	}
 }
 
 // Main Drawing --------------------------
@@ -17,17 +21,23 @@ function updateData() {
 	var i;
 	for(i=0;i<bods.N;i++){
 		data.innerHTML += "<li> B"+i+" : Pos "+
-			bods.pos.x[i]+", "+bods.pos.y[i]+
+			bods.pos.x[i].toFixed(2)+", "+bods.pos.y[i].toFixed(2)+
 			" </li>";
 	}
 	data.innerHTML += "</ul>";
 }
 
 // Updates graphics in Canvas
-function refresh() {
+function refreshGraphics() {
+	c.clearRect(0,0,canvasElement.width,canvasElement.height);
+
+	if (isDrag) {
+		drawCircle(dragx,dragy,massToRadius(dragm));
+		drawArrow(dragx,dragy,dragx2,dragy2);
+	}
 
 	for(i=0;i<bods.N;i++){
-		drawCircle(bods.pos.x[i],bods.pos.y[i],6);
+		drawCircle(bods.pos.x[i],bods.pos.y[i],massToRadius(bods.mass[i]));
 		drawArrow(bods.pos.x[i],
 			bods.pos.y[i],
 			bods.pos.x[i]+bods.vel.x[i],
@@ -35,6 +45,14 @@ function refresh() {
 	}
 
 	updateData();
+}
+
+var MINRADIUS = 1;
+var MAXRADIUS = 20;
+
+function massToRadius(mass) {
+	return MINRADIUS+(mass-MINMASS)/(MAXMASS-MINMASS)*(MAXRADIUS-MINRADIUS);
+	
 }
 
 // Simple Shapes --------------------------
@@ -83,8 +101,4 @@ function drawArrow(x,y,x2,y2,h) {
     c.lineTo(x2,y2);
     c.closePath();
     c.fill();
-
-    
-    
-    console.log("Arrow ",x,",",y," ",x2,",",y2);
 }

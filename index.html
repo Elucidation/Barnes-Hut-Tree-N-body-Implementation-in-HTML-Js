@@ -10,15 +10,51 @@
 
 <body>
 <p>Here it is.</p>
-
-<canvas id="bnCanvas"
-		width="300" 
-		height="200" >
-</canvas>
-
-<div id="data">Nothing here yet.</div>
+<p>Click to place body<br/>
+Drag to set velocity of body<br/>
+Press e/d keys while dragging to change mass of body<br/>
+No collision checks
+</p>
+<table>
+	<tr>
+		<td>
+			<canvas id="bnCanvas"
+					width="600" 
+					height="400" >
+			</canvas>
+		</td>
+		<td>
+			<div>
+				<button type="button" onclick="startSys()">Start</button>
+				<button type="button" onclick="pauseSys()">Stop/Pause</button>
+			</div>
+			<div>
+			<table border=0>
+			<tr><td colspan=3 align="center">
+				<b>DT: <span id="dtSliderVal">0.01</span></b>
+			</td></tr>
+			<tr>
+			<td>0.0001</td>
+			<td><input type="range" min="-4" max="-1" value="-2" step=0.5 onchange="setDT(this.value)" /></td>
+			<td>0</td>
+			</tr>
+			</table>
+			<script type="text/javascript">
+			setDT(-2);
+			function setDT(v)
+			{
+				dt = Math.pow(10,v);
+				document.getElementById("dtSliderVal").innerHTML=dt.toFixed(4);
+			}
+			</script>
+			</div>
+			<div id="data">Nothing here yet.</div>
+		</td>
+	</tr>
+</table>
 
 <script>
+DEBUG = true; // Extra info in console
 initBN("bnCanvas");
 initGraphics("bnCanvas","data");
 initUI("bnCanvas");
