@@ -1,19 +1,29 @@
 <html>
 
 <head>
+	<link rel="stylesheet" type="text/css" href="bnStyle.css" />
 	<script src="bntree.js"></script>
+	<script src="graphics.js"></script>
+	<script src="userInput.js"></script>
 	<title>Barnes-Hut Tree Implementation in HTML/Javascript</title>
 </head>
 
 <body>
-Here it is.
-<ul>
+<p>Here it is.</p>
+
+<canvas id="bnCanvas"
+		width="300" 
+		height="200" >
+</canvas>
+
+<div id="data">Nothing here yet.</div>
+
 <script>
-for(i=0;i<5;i++){
-	document.write("<li>",i,":Hi ",x,"</li>");
-}
+initBN("bnCanvas");
+initGraphics("bnCanvas","data");
+initUI("bnCanvas");
 </script>
-</ul>
+
 </body>
 
 </html>
