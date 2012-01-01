@@ -3,12 +3,12 @@ Barnes-Hut N-body Simulation in HTML/Javascript
 
 A [Barnes-Hut Simulation](http://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation) is an N-body simulation of gravitational interactions between point particles using the Barnes-Hut algorithm.
 
-![How index.html looks in a browswer](http://i.imgur.com/NJEvM.png)
+This simulator shows for an arbitrary amount of bodies/points in a 2d field:
 
-For an arbitrary amount of bodies/points
 ![Clear image 1k bodies](http://i.imgur.com/tygCK.png)
 
-A Barnes-Hut Tree sub-divides the space by quadrants.
+A Barnes-Hut Tree sub-divides the space by quadrants:
+
 ![BN Tree image 1k bodies](http://i.imgur.com/f7OI0.png)
 
 
@@ -24,6 +24,10 @@ With a low number of bodies N < 50 or so, a slightly streamlined brute force is 
 as N increases, the efficiency increases dramatically (90-99%).
 
 With 10k bodies it takes around 0.5~0.8 seconds to compute a step, and 0.1-0.3 seconds to display it on the canvas.
+
+How `index.html` looks:
+
+![How index.html looks in a browswer](http://i.imgur.com/NJEvM.png)
 
 Status
 ---
