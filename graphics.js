@@ -46,7 +46,7 @@ function drawBNnode(node) {
 			node.box[2],node.box[3]);
 		c.textBaseline = 'top';
 		if (node.b != "PARENT") {
-			c.fillText('B:'+node.b,node.box[0],node.box[1])
+			c.fillText('B:['+node.b.join(" ")+"]",node.box[0],node.box[1])
 		}
 		// Draw Children
 		for (var i=0;i<4;i++){

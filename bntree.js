@@ -5,6 +5,7 @@ var G = 1; // Gravitational Constant
 var ETA = 10; // Softening constant
 var GFACTOR = 1.3; // Higher means distance has more effect (3 is reality)
 var dt; // Global DT set by html
+var MAXDEPTH = 2; // BN tree max depth
 
 // Bodies struct containing all bodies
 bods = {pos:{x:new Array(),y:new Array()},
@@ -47,7 +48,7 @@ function bnSetTreeStats() {
 function bnSetTreeStatsRecurse(node) {
 	// If body in node
 	bnNumNodes += 1;
-	if ( typeof(node.b) != null ) {
+	if ( node.b.length > 0 ) {
 		if (node.b != "PARENT") {
 			bnNumLeafs += 1;
 		}
@@ -63,7 +64,7 @@ function bnSetTreeStatsRecurse(node) {
 
 var bnRoot;
 function bnBuildTree() {
-	bnRoot = {b: null, // Body
+	bnRoot = {b: [], // Body
 		leaf:true,
 		nodes:[null,null,null,null],
 		// x y x2 y2
@@ -72,46 +73,49 @@ function bnBuildTree() {
 	// Add each body to tree
 	for (var i=0;i<bods.N;i++) {
 		bnAddBody(bnRoot,i,0);
-		console.log("ROOT : ",bnRoot.b);
 	}
 	if (DEBUG>=2) {
 		console.log("BNtree Built: ",bnRoot);
 	}
 }
-var MAXDEPTH = 20;
+
 function bnAddBody(node,i,depth) {
-	if (depth > MAXDEPTH) {
-		alert('Hit Maximum Depth of BN Tree! You need to increase the max depth first.');
-		console.log('HIT MAX DEPTH');
-		return -1;
-	}
 	if (DEBUG>=3) {
 		console.log("bnAddBody(",node,",",i,",",depth,")");
 	}
 	// if node has body already
-	if ( node.b != null ) { // not null
-		var subBodies 
-		if (!node.leaf) {
-			subBodies = [i];
-		} else {
-			subBodies = [node.b,i];
-		}
-		for (var k=0;k<subBodies.length;k++) {
-			// Add body to children too		
-			var quad = getQuad(subBodies[k],node.box);
-			var child = node.nodes[quad];
-			if (child) {
-				// if quad has child, recurse with child
-				bnAddBody(child,subBodies[k],depth+1);
+	if ( node.b.length > 0 ) { // not empty
+		// Check if hit max depth
+		if (depth > MAXDEPTH) {
+			if (DEBUG>=3) {console.log('MAX DEPTH B',i);}
+			node.b [node.b.length] = i; // Add body to same node since already at max depth
+		} 
+		else {
+			var subBodies;
+			if (!node.leaf) { // Same as saying node.b = "PARENT"
+				// Node is a parent with children
+				subBodies = [i];
 			} else {
-				// else add body to child
-				node = bnMakeNode(node,quad,subBodies[k]);
+				// Node is a leaf node (no children), turn to parent
+				subBodies = [node.b,i];
 			}
+			for (var k=0;k<subBodies.length;k++) {
+				// Add body to children too		
+				var quad = getQuad(subBodies[k],node.box);
+				var child = node.nodes[quad];
+				if (child) {
+					// if quad has child, recurse with child
+					bnAddBody(child,subBodies[k],depth+1);
+				} else {
+					// else add body to child
+					node = bnMakeNode(node,quad,subBodies[k]);
+				}
+			}
+			node.b = ["PARENT"];
+			node.leaf = false; // Always going to turn into a parent if not already
 		}
-		node.b = "PARENT";
-		node.leaf = false;
 	} else { // else if node empty, add body
-		node.b = i;
+		node.b = [i];
 	}
 }
 
@@ -132,7 +136,7 @@ function bnMakeNode(parent,quad,child) {
 	if (DEBUG>=3) {
 		console.log("bnMakeNode(",parent,",",quad,",",child,")");
 	}
-	var child = {b:child,
+	var child = {b:[child],
 		leaf:true,
 		nodes:[null,null,null,null],
 		box:[0,0,0,0]};
