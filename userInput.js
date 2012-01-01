@@ -37,6 +37,7 @@ function mouseDown(e) {
 	dragy = mouseY;
 	dragx2 = mouseX;
 	dragy2 = mouseY;
+	refreshGraphics();
 }
 
 function mouseMove(e) {
@@ -48,6 +49,7 @@ function mouseMove(e) {
 		dragy2 = mouseY;
 		dragx2 = (mouseX-dragx)/arrowMult + dragx;
 		dragy2 = (mouseY-dragy)/arrowMult + dragy;
+		refreshGraphics();
 	}
 }
 

@@ -129,6 +129,7 @@ var sysTimer;
 var sysRunning = false;
 function startSys() {
 	sysTimer = setInterval(step,10);
+	gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
 	sysRunning = true;
 	if (DEBUG) {
 	    console.log("START SYSTEM ",T,"s");
@@ -136,6 +137,7 @@ function startSys() {
 }
 function pauseSys() {
 	clearInterval(sysTimer);
+	clearInterval(gfxTimer);
 	sysRunning = false;
 	if (DEBUG) {
 	    console.log("STOP SYSTEM ",T,"s");

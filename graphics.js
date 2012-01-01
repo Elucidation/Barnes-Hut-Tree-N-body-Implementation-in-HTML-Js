@@ -5,6 +5,8 @@ arrowMult = 1;
 
 // Canvas Context
 var c;
+// Graphics refresh timer
+var gfxTimer=0;
 
 
 function initGraphics(canvasId,dataId){
@@ -12,7 +14,7 @@ function initGraphics(canvasId,dataId){
 	c = canvasElement.getContext("2d");
 	data = document.getElementById(dataId);
 
-	gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
+	//gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
 
 	if (DEBUG) {
 		console.log('Initialize Graphics complete.');

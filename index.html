@@ -5,6 +5,7 @@
 	<script src="bntree.js"></script>
 	<script src="graphics.js"></script>
 	<script src="userInput.js"></script>
+	<script src="fileIO.js"></script>
 	<title>Barnes-Hut Tree Implementation in HTML/Javascript</title>
 </head>
 
@@ -16,6 +17,11 @@ Drag to set velocity of body<br/>
 Press e/d keys while dragging to change mass of body<br/>
 No collision checks
 </p>
+<div>
+<input type="file" id="fileInputs" name="files[]" />
+<output id="fileList"></output
+</div>
+
 <table>
 	<tr>
 		<td>
@@ -60,6 +66,7 @@ drawArrows = true;
 initBN("bnCanvas");
 initGraphics("bnCanvas","data");
 initUI("bnCanvas");
+initFileIO();
 </script>
 
 </body>
