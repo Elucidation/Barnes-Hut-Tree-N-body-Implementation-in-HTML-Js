@@ -127,10 +127,16 @@ function setDT(v)
 	document.getElementById("dtSliderVal").innerHTML=dt.toFixed(4);
 }
 
-function toggleDEBUG() {
-	DEBUG = (DEBUG+1)%DEBUGMAX; // 0 1 2
+function setDEBUG(lvl) {
+	DEBUG = lvl%DEBUGMAX;
 	console.log("DEBUG SET: ",DEBUG);
+	document.getElementById("debugLVL").innerHTML=DEBUG;
 	refreshGraphics();
+}
+
+function toggleDEBUG() {
+	setDEBUG(DEBUG+1);
+	document.getElementById("debugSlider").value=DEBUG;
 }
 
 function toggleArrows() {

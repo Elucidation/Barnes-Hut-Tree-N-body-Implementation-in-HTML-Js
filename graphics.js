@@ -1,4 +1,4 @@
-var DEBUGMAX = 4; // Levels of DEBUG
+var DEBUGMAX = 5; // Levels of DEBUG
 
 // Arrow Length Multipliers
 drawArrows = false; // Button edit
@@ -37,10 +37,12 @@ function drawBNnode(node) {
 			node.box[2],node.box[3]);
 		c.textBaseline = 'top';
 		
-		// Draw Center of Mass
-		c.strokeStyle = '#f00';
-		c.lineWidth = "0.5";
-		drawCross(node.CoM[1],node.CoM[2],5);
+		if(DEBUG >= 4) {
+			// Draw Center of Mass
+			c.strokeStyle = '#f00';
+			c.lineWidth = "0.5";
+			drawCross(node.CoM[1],node.CoM[2],5);
+		}
 
 		if (node.b != "PARENT") {
 			c.fillText('B:['+node.b.join(" ")+"]",node.box[0],node.box[1])
@@ -69,7 +71,15 @@ function updateData() {
 	}
 	data.innerHTML += "<br>\n";
 	data.innerHTML += "# Bodies: "+bods.N+"<br/>\n";
-	data.innerHTML += "# Force calculations per step: "+numChecks+"\n";
+	data.innerHTML += "# Force calculations per step: "+numChecks+"<br/>\n";
+	if (INTERACTION_METHOD=="BN") {
+		data.innerHTML += "BN TREE - Depth: "+bnDepth+", # Nodes: "+bnNumNodes+", # Leafs: "+bnNumLeafs+"</br>\n";
+		var bruteChecks = bods.N*bods.N;
+		var bruteHalfChecks = bods.N*(bods.N-1)/2;
+		data.innerHTML += "BN Tree O(nlogn) ["+numChecks+"]</br>\n";
+		data.innerHTML += "Efficiency vs Brute Force O(n^2) ["+bruteChecks+"] <b>"+(100-100*numChecks/bruteChecks).toFixed(2)+"%</b></br>\n";
+		data.innerHTML += "Efficiency vs Half Brute Force O(n^2) ["+bruteHalfChecks+"] <b>"+(100-100*numChecks/bruteHalfChecks).toFixed(2)+"%</b></br>\n";
+	}
 	if (DEBUG) {
 		data.innerHTML += "<ul>";
 		var i;

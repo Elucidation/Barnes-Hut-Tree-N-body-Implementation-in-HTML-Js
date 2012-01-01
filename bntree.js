@@ -5,7 +5,10 @@ var G = 1; // Gravitational Constant
 var ETA = 10; // Softening constant
 var GFACTOR = 1.3; // Higher means distance has more effect (3 is reality)
 var dt; // Global DT set by html
-var MAXDEPTH = 2; // BN tree max depth
+var MAXDEPTH = 10; // BN tree max depth ( one less than actual, example with maxdepth = 2, the levels are [0 1 2] )
+var BN_THETA = 1;
+var INTERACTION_METHOD = "BN"; // BN or BRUTE, type of tree search to use
+
 
 // Bodies struct containing all bodies
 bods = {pos:{x:new Array(),y:new Array()},
@@ -26,6 +29,22 @@ function initBN(canvasId) {
 	}
 }
 
+function addNrandomBodies(n){
+	for (var i=0;i<n;i++) {
+		addRandomBody();
+	}
+}
+
+function addRandomBody() {
+	addBody(
+		Math.random()*canvasElement.width,
+		Math.random()*canvasElement.height,
+		Math.random()*10-5,
+		Math.random()*10-5,
+		Math.random()*(MAXMASS-MINMASS)+MINMASS
+	);
+}
+
 function addBody(x,y,vx,vy,m) {
 	bods.pos.x [bods.N] = x;
 	bods.pos.y [bods.N] = y;
@@ -41,13 +60,16 @@ function addBody(x,y,vx,vy,m) {
 	}
 }
 // BN Tree code ------
-var bnDepth, bnNumNodes, bnNumLeafs;
+var bnDepth=0, bnNumNodes=0, bnNumLeafs=0;
 function bnSetTreeStats() {
-	bnSetTreeStatsRecurse(bnRoot);
+	bnDepth=0, bnNumNodes=0, bnNumLeafs=0;
+	bnSetTreeStatsRecurse(bnRoot,0);
 }
-function bnSetTreeStatsRecurse(node) {
+function bnSetTreeStatsRecurse(node,depth) {
 	// If body in node
 	bnNumNodes += 1;
+	bnDepth = Math.max(depth,bnDepth);
+
 	if ( node.b.length > 0 ) {
 		if (node.b != "PARENT") {
 			bnNumLeafs += 1;
@@ -55,9 +77,7 @@ function bnSetTreeStatsRecurse(node) {
 		// Draw Children
 		for (var i=0;i<4;i++){
 			var child = node.nodes[i];
-			//console.log("B",node.b,": C",i," ",child);
-
-			if (child) { drawBNnode( child ); }
+			if (child) { bnSetTreeStatsRecurse(child,depth+1) }
 		}
 	}
 }
@@ -99,6 +119,7 @@ function bnBuildTree() {
 	if (DEBUG>=2) {
 		console.log("BNtree Built: ",bnRoot);
 	}
+	bnSetTreeStats(); // Update bn tree stats
 }
 
 // BBOX = [x y x2 y2]
@@ -205,13 +226,44 @@ function bnMakeNode(parent,quad,child) {
 	return parent;
 }
 
-function doBNtree() {
+function doBNtree(bI) {
+	doBNtreeRecurse(bI,bnRoot);
+}
+function doBNtreeRecurse(bI,node) {
+	if (node.leaf) {
+		// If node is a leaf node
+		for (var k=0;k<node.b.length;k++) {
+			if (bI != node.b[k]) { // Skip self
+				setAccel(bI,node.b[k],false);
+				numChecks += 1;
+			}
+		}
+	}
+	else {
+		var s = Math.min( node.box[2]-node.box[0] , node.box[3]-node.box[1] ); // Biggest side of box
+		var d = getDist(bods.pos.x[bI],bods.pos.y[bI],
+			node.CoM[1],node.CoM[2]);
+		if (s/d < BN_THETA) {
+			setAccelDirect(bI,node.CoM[0],node.CoM[1],node.CoM[2])
+			numChecks += 1;
+		}
+		else {
+			// Recurse for each child
+			for (var k=0;k<4;k++) {
+				if (node.nodes[k]) {doBNtreeRecurse(bI,node.nodes[k]);}
+			}
+		}
+	}
+}
+
+function getDist(x,y,x2,y2) {
+	return Math.sqrt(Math.pow(x2-x,2)+Math.pow(y2-y,2));
 }
 
 // Update accelerations using BN tree
 function forceBNtree() {
-	numChecks = 0;
 	bnBuildTree(); // Build BN tree based on current pos
+	numChecks = 0;
 	for (var i=0;i<bods.N;i++) {
 		// For each body
 		doBNtree(i);
@@ -219,6 +271,7 @@ function forceBNtree() {
 }
 // ------
 // do_Both defaults true: Updates acceleration of bods[j] also (negative of bods[i])
+
 function setAccel(i,j,do_Both) {
 	do_Both = typeof(do_Both) != 'undefined' ? do_Both : true;
 	
@@ -236,22 +289,42 @@ function setAccel(i,j,do_Both) {
 		bods.acc.y[j] -= F[1]/bods.mass[j];
 	}
 }
+function setAccelDirect(i,m,x,y) {
+	// Set's accel according to given mass
+
+	// get Force Vector between body i
+	// and a virtual mass
+	//   with mass m, at position cx,cy
+	var F = getForceVecDirect(
+		bods.mass[i],bods.pos.x[i],bods.pos.y[i],
+		m,x,y);
+	
+	// Update acceleration of body
+	bods.acc.x[i] += F[0]/bods.mass[i];
+	bods.acc.y[i] += F[1]/bods.mass[i];
+}
 
 function getForceVec(i,j) {
-	// Determines force interaction between
-	// bods[i] and bods[j], an adds to bods[i]
-	var dx = bods.pos.x[j]-bods.pos.x[i];
-	var dy = bods.pos.y[j]-bods.pos.y[i];
-	var r = Math.sqrt(dx*dx+dy*dy)+ETA;
-	// F_{x|y} = d_{x|y}/r * G*M*m/r.^3;
-	var F = G*bods.mass[i]*bods.mass[j]/Math.pow(r,GFACTOR);
-
-	if (DEBUG>=4) {
+	if (DEBUG>=10) {
 		console.log("B",i," <-> B",j," : ",F);
 	}
+	return getForceVecDirect(
+		bods.mass[i],bods.pos.x[i],bods.pos.y[i],
+		bods.mass[j],bods.pos.x[j],bods.pos.y[j]);
+}
+
+function getForceVecDirect(m,x,y,m2,x2,y2) {
+	// Determines force interaction between
+	// bods[i] and bods[j], an adds to bods[i]
+	var dx = x2-x;
+	var dy = y2-y;
+	var r = Math.sqrt(dx*dx+dy*dy)+ETA;
+	// F_{x|y} = d_{x|y}/r * G*M*m/r.^3;
+	var F = G*m*m2/Math.pow(r,GFACTOR);
 
 	return [ F*dx/r , F*dy/r ];
 }
+
 
 // Update accels by checking every body to each other
 function forceBrute() {
@@ -276,8 +349,15 @@ function doForces() {
 	}
 
 	// Determine accelerations on all bodies
-	bnBuildTree(); // REMOVE WHEN doing forceBNtree!
-	forceBrute();
+	switch (INTERACTION_METHOD) {
+		case "BRUTE":
+			forceBrute();
+			break;
+		case "BN":
+			bnBuildTree(); // REMOVE WHEN doing forceBNtree!
+			forceBNtree();
+			break;
+	}
 	
 	if (DEBUG>=2) {
 		console.log("# Force Checks: ",numChecks);

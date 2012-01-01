@@ -30,6 +30,18 @@ Load Input JSON File:<br/>
 					width="600" 
 					height="400" >
 			</canvas>
+			<div>
+				<table border=0>
+					<tr>					
+						<td><button type="button" onclick="toggleArrows()">Toggle Arrows On/Off</button></td>
+						<td><button type="button" onclick="toggleDEBUG()">Toggle Debug</button></td>
+						<td>( <b>LVL <span id="debugLVL">1</span></b> )</td>
+						<td>0</td>
+						<td><input id="debugSlider" type="range" min=0 max=4 value=1 step=1 onchange="setDEBUG(this.value)" /></td>
+						<td>4</td>
+					</tr>
+				</table>
+			</div>
 		</td>
 		<td>
 			<div>
@@ -37,28 +49,24 @@ Load Input JSON File:<br/>
 				<button type="button" onclick="pauseSys()">Stop/Pause</button>
 			</div>
 			<div>
-			<table border=0>
-			<tr><td colspan=3 align="center">
-				<b> TIME: <output id="timeDisp">0.0</output></b>
-			</td></tr>
-			<tr><td colspan=3 align="center">
-				<b>DT: <span id="dtSliderVal">0.01</span></b>
-			</td></tr>
-			<tr>
-			<td>0.0001</td>
-			<td><input type="range" min="-4" max="1" value="-2" step=0.1 onchange="setDT(this.value)" /></td>
-			<td>10</td>
-			</tr>
-			</table>
+				<table border=0>
+					<tr><td colspan=3 align="center">
+						<b> TIME: <output id="timeDisp">0.0</output></b>
+					</td></tr>
+					<tr><td colspan=3 align="center">
+						<b>DT: <span id="dtSliderVal">0.01</span></b>
+					</td></tr>
+					<tr>
+						<td>0.0001</td>
+						<td><input type="range" min="-4" max="1" value="-2" step=0.1 onchange="setDT(this.value)" /></td>
+						<td>10</td>
+					</tr>
+				</table>
 			</div>
 			<div id="data">Nothing here yet.</div>
 		</td>
 	</tr>
 </table>
-<div>
-	<button type="button" onclick="toggleArrows()">Toggle Arrows On/Off</button>
-	<button type="button" onclick="toggleDEBUG()">Toggle Debug 0/1/2</button>
-</div>
 
 <script>
 DEBUG = 1; // Extra info in console (0=Off,1=Normal,2=Absurd, 3=BNtree)
