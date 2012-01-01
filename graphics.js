@@ -1,7 +1,17 @@
 
 // Arrow Length Multipliers
 drawArrows = false; // Button edit
+function toggleArrows() {
+	drawArrows = !drawArrows;
+	console.log("SHOW ARROWS SET : ",drawArrows);;
+}
 arrowMult = 1;
+
+
+function toggleDEBUG() {
+	DEBUG = (DEBUG+1)%3; // 0 1 2
+	console.log("DEBUG SET: ",DEBUG);
+}
 
 // Canvas Context
 var c;
