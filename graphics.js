@@ -2,8 +2,13 @@ var DEBUGMAX = 5; // Levels of DEBUG
 
 // Arrow Length Multipliers
 drawArrows = false; // Button edit
-arrowMult = 1;
+arrowLengthRatio = 5;
 
+// Circle Sizes
+var MINRADIUS = 1;
+var MAXRADIUS = 5;
+
+var SHOW_BN_TREE = false;
 
 // Canvas Context
 var c;
@@ -27,7 +32,7 @@ function initGraphics(canvasId,dataId){
 // Main Drawing --------------------------
 
 function drawBNtree() {
-	if (bnRoot) {drawBNnode(bnRoot)};
+	if (bnRoot && SHOW_BN_TREE) {drawBNnode(bnRoot)};
 }
 function drawBNnode(node) {
 	// If body in node
@@ -137,9 +142,6 @@ function refreshGraphics() {
 	updateData();
 }
 
-var MINRADIUS = 1;
-var MAXRADIUS = 20;
-
 function massToRadius(mass) {
 	return MINRADIUS+(mass-MINMASS)/(MAXMASS-MINMASS)*(MAXRADIUS-MINRADIUS);
 	
@@ -173,10 +175,26 @@ function drawCircle(x,y,r) {
 function drawArrow(x,y,x2,y2,h,color) {
 	h = (typeof(h) != 'undefined' && h != '') ? h : 10; // Default h
 	color = typeof(color) != 'undefined' ? color : '#0f0'; // Default color
-	var angle = Math.atan2(y2-y,x2-x);
 
-	x2 = x + (x2-x)*arrowMult;
-	y2 = y + (y2-y)*arrowMult;
+	// Resize arrow based on arrowLengthRatio
+	// v = [x2-x,y2-y];
+	// vMag = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
+	// if (vMag==0) {vMag = 1;}
+	// console.log(vMag);
+
+	// x2 = x + v[0]*arrowLengthRatio/vMag;
+	// y2 = y + v[1]*arrowLengthRatio/vMag;
+	
+	// Linear Ratio
+	x2 = x + (x2-x)/arrowLengthRatio;
+	y2 = y + (y2-y)/arrowLengthRatio;
+
+	// Logarithmic Ratio
+	// var d = getDist(x,y,x2,y2);
+	// var arrowLength = (Math.log(2+d)-Math.log(2))/Math.log(1.1);
+	// x2 = x + (x2-x)/d * arrowLength;
+	// y2 = y + (y2-y)/d * arrowLength;
+
 
 	c.strokeStyle = color;
 	c.fillStyle = color;
@@ -191,6 +209,7 @@ function drawArrow(x,y,x2,y2,h,color) {
     c.stroke();
 
 	// Arrow head
+	var angle = Math.atan2(y2-y,x2-x);
 	c.beginPath();
 	c.moveTo(x2,y2);
     c.lineTo(x2-h*Math.cos(angle-Math.PI/8),y2-h*Math.sin(angle-Math.PI/8));

@@ -48,8 +48,8 @@ function mouseMove(e) {
 		else if(e.layerX) {mouseX = e.layerX;mouseY = e.layerY;} // IE
 		dragx2 = mouseX;
 		dragy2 = mouseY;
-		dragx2 = (mouseX-dragx)/arrowMult + dragx;
-		dragy2 = (mouseY-dragy)/arrowMult + dragy;
+		dragx2 = (mouseX-dragx)/arrowLengthRatio + dragx;
+		dragy2 = (mouseY-dragy)/arrowLengthRatio + dragy;
 		refreshGraphics();
 	}
 }
@@ -62,8 +62,8 @@ function mouseUp(e) {
 		if(e.offsetX) {mouseX = e.offsetX; mouseY = e.offsetY;}
 		else if(e.layerX) {mouseX = e.layerX;mouseY = e.layerY;} // IE
 		
-		mouseX = (mouseX-dragx)/arrowMult + dragx;
-		mouseY = (mouseY-dragy)/arrowMult + dragy;
+		mouseX = (mouseX-dragx)/arrowLengthRatio + dragx;
+		mouseY = (mouseY-dragy)/arrowLengthRatio + dragy;
 		
 		addBody(dragx,dragy,mouseX-dragx,mouseY-dragy,dragm);
 		refreshGraphics();

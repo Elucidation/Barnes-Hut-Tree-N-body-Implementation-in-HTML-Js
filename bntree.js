@@ -58,6 +58,9 @@ function addBody(x,y,vx,vy,m) {
 	if (DEBUG) {
 	    console.log("ADD BODY M: ",m," P:",x,",",y," V:",vx,",",vy);
 	}
+	if (bods.N >= 100 && DEBUG > 0) {
+		setDEBUG(0); // temp check to keep debug off when too many bodies
+	}
 }
 // BN Tree code ------
 var bnDepth=0, bnNumNodes=0, bnNumLeafs=0;
@@ -113,7 +116,7 @@ function bnBuildTree() {
 			bnAddBody(bnRoot,i,0);
 		}
 		else {
-			console.log("Body ",i," has left the BNtree area. Not added");
+			if (DEBUG>=4) {console.log("Body ",i," has left the BNtree area. Not added");}
 		}
 	}
 	if (DEBUG>=2) {
