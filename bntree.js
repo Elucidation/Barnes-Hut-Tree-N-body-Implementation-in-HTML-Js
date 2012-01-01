@@ -62,21 +62,49 @@ function bnSetTreeStatsRecurse(node) {
 	}
 }
 
+function bnDeleteTree() {
+	if (bnRoot) {bnRoot = bnDeleteNode(bnRoot);}
+}
+function bnDeleteNode(node) {
+	node.b = null;
+	node.box = null;
+	// For each child
+	for (var i=0;i<4;i++) {
+		if (node.nodes[i]) { // If child exists
+			node.nodes[i] = bnDeleteNode(node.nodes[i]);
+		}
+	}
+	return null;
+}
+
 var bnRoot;
 function bnBuildTree() {
+	bnDeleteTree(bnRoot); // Delete Tree to clear memory
 	bnRoot = {b: [], // Body
 		leaf:true,
+		CoM: null, // center of mass
 		nodes:[null,null,null,null],
 		// x y x2 y2
 		box:[0, 0, canvasElement.width, canvasElement.height]};
 	
 	// Add each body to tree
 	for (var i=0;i<bods.N;i++) {
-		bnAddBody(bnRoot,i,0);
+		if (pointInBBOX(bods.pos.x[i],bods.pos.y[i],bnRoot.box)) {
+			bnAddBody(bnRoot,i,0);
+		}
+		else {
+			console.log("Body ",i," has left the BNtree area. Not added");
+		}
 	}
 	if (DEBUG>=2) {
 		console.log("BNtree Built: ",bnRoot);
 	}
+}
+
+// BBOX = [x y x2 y2]
+function pointInBBOX(x,y,BBOX) {
+	if (x >= BBOX[0] && x <= BBOX[2] && y >= BBOX[1] && y <= BBOX[3]) {return true;}
+	else {return false;}
 }
 
 function bnAddBody(node,i,depth) {
@@ -114,8 +142,13 @@ function bnAddBody(node,i,depth) {
 			node.b = ["PARENT"];
 			node.leaf = false; // Always going to turn into a parent if not already
 		}
+		// Update center of mass
+		node.CoM[1] = (node.CoM[1]*node.CoM[0] + bods.pos.x[i]*bods.mass[i])/(node.CoM[0]+bods.mass[i]);
+		node.CoM[2] = (node.CoM[2]*node.CoM[0] + bods.pos.y[i]*bods.mass[i])/(node.CoM[0]+bods.mass[i]);
+		node.CoM[0] += bods.mass[i];
 	} else { // else if node empty, add body
 		node.b = [i];
+		node.CoM = [bods.mass[i], bods.pos.x[i],bods.pos.y[i]]; // Center of Mass set to the position of single body
 	}
 }
 
@@ -138,6 +171,7 @@ function bnMakeNode(parent,quad,child) {
 	}
 	var child = {b:[child],
 		leaf:true,
+		CoM : [bods.mass[child], bods.pos.x[child],bods.pos.y[child]], // Center of Mass set to the position of single body
 		nodes:[null,null,null,null],
 		box:[0,0,0,0]};
 

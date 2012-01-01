@@ -126,3 +126,15 @@ function setDT(v)
 	}
 	document.getElementById("dtSliderVal").innerHTML=dt.toFixed(4);
 }
+
+function toggleDEBUG() {
+	DEBUG = (DEBUG+1)%DEBUGMAX; // 0 1 2
+	console.log("DEBUG SET: ",DEBUG);
+	refreshGraphics();
+}
+
+function toggleArrows() {
+	drawArrows = !drawArrows;
+	console.log("SHOW ARROWS SET : ",drawArrows);
+	refreshGraphics();
+}

@@ -2,17 +2,8 @@ var DEBUGMAX = 4; // Levels of DEBUG
 
 // Arrow Length Multipliers
 drawArrows = false; // Button edit
-function toggleArrows() {
-	drawArrows = !drawArrows;
-	console.log("SHOW ARROWS SET : ",drawArrows);;
-}
 arrowMult = 1;
 
-
-function toggleDEBUG() {
-	DEBUG = (DEBUG+1)%DEBUGMAX; // 0 1 2
-	console.log("DEBUG SET: ",DEBUG);
-}
 
 // Canvas Context
 var c;
@@ -45,6 +36,12 @@ function drawBNnode(node) {
 		drawBBOX(node.box[0],node.box[1],
 			node.box[2],node.box[3]);
 		c.textBaseline = 'top';
+		
+		// Draw Center of Mass
+		c.strokeStyle = '#f00';
+		c.lineWidth = "0.5";
+		drawCross(node.CoM[1],node.CoM[2],5);
+
 		if (node.b != "PARENT") {
 			c.fillText('B:['+node.b.join(" ")+"]",node.box[0],node.box[1])
 		}
@@ -119,6 +116,9 @@ function refreshGraphics() {
 	// Draw Center of Mass
 	com.x /= allMass;
 	com.y /= allMass;
+
+	c.strokeStyle = '#00f';
+	c.lineWidth = "1";
 	drawCross(com.x,com.y);
 
 	// Draw BNtree
@@ -193,9 +193,6 @@ function drawArrow(x,y,x2,y2,h,color) {
 // h = cross line width
 function drawCross(x,y,h) {
 	h = typeof(h) != 'undefined' ? h : 10; // Default h
-	c.strokeStyle = '#00f';
-	c.lineWidth = "1";
-
 	// Lines
 	c.beginPath();
 	c.moveTo(x-h/2,y);
