@@ -8,13 +8,13 @@ Usage
 Open main file index.html with browser
 Some screenshots are also in repo.
 
-With Brute force : O(0.5*n^2) calculations, roughly 125k force calculations for N=500.
-With Barnes-Hut tree calcualtions, it'll be O(nlogn).
+With Brute force : `O(n^2)` calculations (exactly `N*(N+1)/2` actually), roughly 125k force calculations for N=500.
+With Barnes-Hut tree calcualtions, it'll be `O(nlogn)`.
 
 Status
 ---
 Basic framework set up, basic graviation working with forward euler and leapfrog integration.
 
-Brute-force calculation O(n^2) for all bodies at the moment.
+Brute-force calculation `O(n^2)` for all bodies at the moment.
 
 Next step, build quad-tree from bodies as in [LearnHTML5](https://github.com/Elucidation/LearnHTML5) repo.

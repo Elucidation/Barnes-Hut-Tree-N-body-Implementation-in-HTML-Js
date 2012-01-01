@@ -52,16 +52,16 @@ Load Input JSON File:<br/>
 			</table>
 			</div>
 			<div id="data">Nothing here yet.</div>
-			<div>
-				<button type="button" onclick="toggleArrows()">Toggle Arrows On/Off</button>
-				<button type="button" onclick="toggleDEBUG()">Toggle Debug 0/1/2</button>
-			</div>
 		</td>
 	</tr>
 </table>
+<div>
+	<button type="button" onclick="toggleArrows()">Toggle Arrows On/Off</button>
+	<button type="button" onclick="toggleDEBUG()">Toggle Debug 0/1/2</button>
+</div>
 
 <script>
-DEBUG = 1; // Extra info in console (0=Off,1=Simple,2=Absurd)
+DEBUG = 1; // Extra info in console (0=Off,1=Normal,2=Absurd)
 drawArrows = true;
 initBN("bnCanvas");
 initGraphics("bnCanvas","data");

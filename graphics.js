@@ -48,7 +48,7 @@ function updateData() {
 	}
 	data.innerHTML += "<br>\n";
 	data.innerHTML += "# Bodies: "+bods.N+"<br/>\n";
-	data.innerHTML += "# Force calcuations per step: "+numChecks+"\n";
+	data.innerHTML += "# Force calculations per step: "+numChecks+"\n";
 	if (DEBUG) {
 		data.innerHTML += "<ul>";
 		var i;
