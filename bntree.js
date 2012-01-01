@@ -5,17 +5,27 @@ var G = 1; // Gravitational Constant
 var ETA = 10; // Softening constant
 var GFACTOR = 1.3; // Higher means distance has more effect (3 is reality)
 var dt; // Global DT set by html
-var MAXDEPTH = 10; // BN tree max depth ( one less than actual, example with maxdepth = 2, the levels are [0 1 2] )
+var MAXDEPTH = 50; // BN tree max depth ( one less than actual, example with maxdepth = 2, the levels are [0 1 2] )
 var BN_THETA = 1;
 var INTERACTION_METHOD = "BN"; // BN or BRUTE, type of tree search to use
 
 
 // Bodies struct containing all bodies
-bods = {pos:{x:new Array(),y:new Array()},
+var bods;
+
+function resetBodies() {
+	if (bods) {
+		bods.pos = null;
+		bods.vel = null;
+		bods.mass = null;
+	}
+
+	bods = {pos:{x:new Array(),y:new Array()},
 		vel:{x:new Array(),y:new Array()},
 		acc:{x:new Array(),y:new Array()},
 		mass:new Array(),
 		N:0};
+}
 
 // Canvas Context
 var c;
@@ -24,6 +34,9 @@ var c;
 function initBN(canvasId) {
 	canvasElement = document.getElementById(canvasId);
 	c = canvasElement.getContext("2d");
+
+	resetBodies();
+
 	if (DEBUG) {
 		console.log('Initialize BN complete.');
 	}
@@ -33,6 +46,7 @@ function addNrandomBodies(n){
 	for (var i=0;i<n;i++) {
 		addRandomBody();
 	}
+	refreshGraphics();
 }
 
 function addRandomBody() {
@@ -370,16 +384,21 @@ function doForces() {
 // Basic update system step by time step dt
 var T = 0; // current system time
 var dt = 0.01;
+var stepTime;
 function step() {
-	
+	var startTime = (new Date()).getTime();
+
 	// Use integration method to step once by global dt
 	leapfrog();
+
+	stepTime = (new Date()).getTime()-startTime;
 
 	T += dt;
 	if (DEBUG>=2) {
 	    console.log("STEP");
 	}
-	refreshGraphics();
+	if (!sysRunning) {refreshGraphics();} // Refresh graphics if paused
+	
 }
 function forwardEuler() {
 	doForces(); // Set/Update accelerations
@@ -419,6 +438,7 @@ function startSys() {
 	if (DEBUG) {
 	    console.log("START SYSTEM ",T,"s");
 	}
+	refreshGraphics();
 }
 function pauseSys() {
 	clearInterval(sysTimer);
@@ -427,4 +447,5 @@ function pauseSys() {
 	if (DEBUG) {
 	    console.log("STOP SYSTEM ",T,"s");
 	}
+	refreshGraphics();
 }

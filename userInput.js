@@ -131,16 +131,29 @@ function setDEBUG(lvl) {
 	DEBUG = lvl%DEBUGMAX;
 	console.log("DEBUG SET: ",DEBUG);
 	document.getElementById("debugLVL").innerHTML=DEBUG;
+	document.getElementById("debugSlider").value=DEBUG;
 	refreshGraphics();
 }
 
 function toggleDEBUG() {
 	setDEBUG(DEBUG+1);
-	document.getElementById("debugSlider").value=DEBUG;
 }
 
 function toggleArrows() {
 	drawArrows = !drawArrows;
 	console.log("SHOW ARROWS SET : ",drawArrows);
+	refreshGraphics();
+}
+
+function toggleShowBNtree() {
+	SHOW_BN_TREE = !SHOW_BN_TREE;
+	console.log("SHOW BN TREE : ",SHOW_BN_TREE);
+	refreshGraphics();
+}
+
+function resetSys() {
+	resetBodies();
+	bnDeleteTree();
+	console.log("DELETED ALL BODIES");
 	refreshGraphics();
 }

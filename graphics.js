@@ -8,13 +8,16 @@ arrowLengthRatio = 5;
 var MINRADIUS = 1;
 var MAXRADIUS = 5;
 
+// Barnes-Hut Tree Graphics
 var SHOW_BN_TREE = false;
+var BN_DRAW_DEPTH = 10; // Depth to draw tree out to
+var BN_DRAW_TEXT_DEPTH = 4; // Depth to draw text of node bbox
 
 // Canvas Context
 var c;
 // Graphics refresh timer
 var gfxTimer=0;
-
+var displayStepTime;
 
 function initGraphics(canvasId,dataId){
 	canvasElement = document.getElementById(canvasId);
@@ -32,11 +35,11 @@ function initGraphics(canvasId,dataId){
 // Main Drawing --------------------------
 
 function drawBNtree() {
-	if (bnRoot && SHOW_BN_TREE) {drawBNnode(bnRoot)};
+	if (bnRoot && SHOW_BN_TREE) {drawBNnode(bnRoot,0)};
 }
-function drawBNnode(node) {
+function drawBNnode(node,depth) {
 	// If body in node
-	if ( typeof(node.b) != 'undefined' ) {
+	if ( typeof(node.b) != 'undefined' && depth <= BN_DRAW_DEPTH) {
 		// Draw Node
 		drawBBOX(node.box[0],node.box[1],
 			node.box[2],node.box[3]);
@@ -49,15 +52,17 @@ function drawBNnode(node) {
 			drawCross(node.CoM[1],node.CoM[2],5);
 		}
 
-		if (node.b != "PARENT") {
-			c.fillText('B:['+node.b.join(" ")+"]",node.box[0],node.box[1])
+		if (node.b != "PARENT" && depth <= BN_DRAW_TEXT_DEPTH) {
+			c.font = "6pt Courier New";
+			c.fillStyle = "#090";
+			c.fillText('B:['+node.b.join(" ")+"]",node.box[0]+1,node.box[1]+1)
 		}
 		// Draw Children
 		for (var i=0;i<4;i++){
 			var child = node.nodes[i];
 			//console.log("B",node.b,": C",i," ",child);
 
-			if (child) { drawBNnode( child ); }
+			if (child) { drawBNnode( child , depth+1); }
 		}
 	}
 }
@@ -84,6 +89,8 @@ function updateData() {
 		data.innerHTML += "BN Tree O(nlogn) ["+numChecks+"]</br>\n";
 		data.innerHTML += "Efficiency vs Brute Force O(n^2) ["+bruteChecks+"] <b>"+(100-100*numChecks/bruteChecks).toFixed(2)+"%</b></br>\n";
 		data.innerHTML += "Efficiency vs Half Brute Force O(n^2) ["+bruteHalfChecks+"] <b>"+(100-100*numChecks/bruteHalfChecks).toFixed(2)+"%</b></br>\n";
+		data.innerHTML += "Time to compute step : "+stepTime+"ms<br/>\n";
+		data.innerHTML += "Time to display step : "+displayStepTime+"ms<br/>\n";
 	}
 	if (DEBUG) {
 		data.innerHTML += "<ul>";
@@ -99,6 +106,8 @@ function updateData() {
 
 // Updates graphics in Canvas
 function refreshGraphics() {
+	var startTime = (new Date()).getTime();
+
 	c.clearRect(0,0,canvasElement.width,canvasElement.height);
 
 	if (isDrag) {
@@ -140,6 +149,8 @@ function refreshGraphics() {
 	drawBNtree();
 
 	updateData();
+
+	displayStepTime = (new Date()).getTime()-startTime;
 }
 
 function massToRadius(mass) {

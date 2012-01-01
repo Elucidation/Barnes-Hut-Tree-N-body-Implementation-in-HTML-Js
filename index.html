@@ -35,6 +35,7 @@ Load Input JSON File:<br/>
 					<tr>					
 						<td><button type="button" onclick="toggleArrows()">Toggle Arrows On/Off</button></td>
 						<td><button type="button" onclick="toggleDEBUG()">Toggle Debug</button></td>
+						<td><button type="button" onclick="toggleShowBNtree()">Toggle Show/Hide BN Tree</button></td>
 						<td>( <b>LVL <span id="debugLVL">1</span></b> )</td>
 						<td>0</td>
 						<td><input id="debugSlider" type="range" min=0 max=4 value=1 step=1 onchange="setDEBUG(this.value)" /></td>
@@ -45,6 +46,7 @@ Load Input JSON File:<br/>
 		</td>
 		<td>
 			<div>
+				<button type="button" onclick="resetSys()">Reset</button>
 				<button type="button" onclick="startSys()">Start</button>
 				<button type="button" onclick="pauseSys()">Stop/Pause</button>
 			</div>
