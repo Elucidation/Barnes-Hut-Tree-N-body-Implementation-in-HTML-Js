@@ -40,18 +40,142 @@ function addBody(x,y,vx,vy,m) {
 	}
 }
 // BN Tree code ------
-function buildTree() {
-	
+var bnDepth, bnNumNodes, bnNumLeafs;
+function bnSetTreeStats() {
+	bnSetTreeStatsRecurse(bnRoot);
 }
+function bnSetTreeStatsRecurse(node) {
+	// If body in node
+	bnNumNodes += 1;
+	if ( typeof(node.b) != null ) {
+		if (node.b != "PARENT") {
+			bnNumLeafs += 1;
+		}
+		// Draw Children
+		for (var i=0;i<4;i++){
+			var child = node.nodes[i];
+			//console.log("B",node.b,": C",i," ",child);
+
+			if (child) { drawBNnode( child ); }
+		}
+	}
+}
+
+var bnRoot;
+function bnBuildTree() {
+	bnRoot = {b: null, // Body
+		leaf:true,
+		nodes:[null,null,null,null],
+		// x y x2 y2
+		box:[0, 0, canvasElement.width, canvasElement.height]};
+	
+	// Add each body to tree
+	for (var i=0;i<bods.N;i++) {
+		bnAddBody(bnRoot,i,0);
+		console.log("ROOT : ",bnRoot.b);
+	}
+	if (DEBUG>=2) {
+		console.log("BNtree Built: ",bnRoot);
+	}
+}
+var MAXDEPTH = 20;
+function bnAddBody(node,i,depth) {
+	if (depth > MAXDEPTH) {
+		alert('Hit Maximum Depth of BN Tree! You need to increase the max depth first.');
+		console.log('HIT MAX DEPTH');
+		return -1;
+	}
+	if (DEBUG>=3) {
+		console.log("bnAddBody(",node,",",i,",",depth,")");
+	}
+	// if node has body already
+	if ( node.b != null ) { // not null
+		var subBodies 
+		if (!node.leaf) {
+			subBodies = [i];
+		} else {
+			subBodies = [node.b,i];
+		}
+		for (var k=0;k<subBodies.length;k++) {
+			// Add body to children too		
+			var quad = getQuad(subBodies[k],node.box);
+			var child = node.nodes[quad];
+			if (child) {
+				// if quad has child, recurse with child
+				bnAddBody(child,subBodies[k],depth+1);
+			} else {
+				// else add body to child
+				node = bnMakeNode(node,quad,subBodies[k]);
+			}
+		}
+		node.b = "PARENT";
+		node.leaf = false;
+	} else { // else if node empty, add body
+		node.b = i;
+	}
+}
+
+function getQuad(i,box) {
+	var mx = (box[0]+box[2])/2;
+	var my = (box[1]+box[3])/2;
+	if (bods.pos.x[i] < mx) { // Left
+		if (bods.pos.y[i] < my) {return 0;} // Top
+		else {return 2;} // Bottom
+	}
+	else { // right
+		if (bods.pos.y[i] < my) {return 1;} // Top
+		else {return 3;} // Bottom}
+	}
+}
+
+function bnMakeNode(parent,quad,child) {
+	if (DEBUG>=3) {
+		console.log("bnMakeNode(",parent,",",quad,",",child,")");
+	}
+	var child = {b:child,
+		leaf:true,
+		nodes:[null,null,null,null],
+		box:[0,0,0,0]};
+
+	switch (quad) {
+		case 0: // Top Left
+			child.box = [parent.box[0],
+				parent.box[1],
+				(parent.box[0]+parent.box[2])/2, 
+				(parent.box[1]+parent.box[3])/2];
+			break;
+		case 1: // Top Right
+			child.box = [(parent.box[0]+parent.box[2])/2,
+				parent.box[1],
+				parent.box[2], 
+				(parent.box[1]+parent.box[3])/2];
+			break;
+		case 2: // Bottom Left
+			child.box = [parent.box[0],
+				(parent.box[1]+parent.box[3])/2,
+				(parent.box[0]+parent.box[2])/2, 
+				parent.box[3]];
+			break;
+		case 3: // Bottom Right
+			child.box = [(parent.box[0]+parent.box[2])/2,
+				(parent.box[1]+parent.box[3])/2,
+				parent.box[2], 
+				parent.box[3]];
+			break;
+	}
+	parent.nodes[quad] = child;
+	return parent;
+}
+
 function doBNtree() {
-	
 }
+
 // Update accelerations using BN tree
 function forceBNtree() {
 	numChecks = 0;
-	for (i=0;i<bods.N;i++) {
+	bnBuildTree(); // Build BN tree based on current pos
+	for (var i=0;i<bods.N;i++) {
 		// For each body
-
 		doBNtree(i);
 	}
 }
@@ -84,7 +208,7 @@ function getForceVec(i,j) {
 	// F_{x|y} = d_{x|y}/r * G*M*m/r.^3;
 	var F = G*bods.mass[i]*bods.mass[j]/Math.pow(r,GFACTOR);
 
-	if (DEBUG==2) {
+	if (DEBUG>=4) {
 		console.log("B",i," <-> B",j," : ",F);
 	}
 
@@ -95,8 +219,8 @@ function getForceVec(i,j) {
 function forceBrute() {
 	numChecks = 0;
 	// Brute force O(n^2) comparisons
-	for (i=0;i<bods.N;i++) {
-		for (j=i+1;j<bods.N;j++) {
+	for (var i=0;i<bods.N;i++) {
+		for (var j=i+1;j<bods.N;j++) {
 			setAccel(i,j);
 			numChecks += 1;
 		}
@@ -107,18 +231,17 @@ function forceBrute() {
 var numChecks;
 // Set accelerations of bodies based on gravity
 function doForces() {
-	var i,j;
-
 	// Zero accelerations
-	for (i=0;i<bods.N;i++) {
+	for (var i=0;i<bods.N;i++) {
 		bods.acc.x[i]=0;
 		bods.acc.y[i]=0;
 	}
 
 	// Determine accelerations on all bodies
+	bnBuildTree(); // REMOVE WHEN doing forceBNtree!
 	forceBrute();
 	
-	if (DEBUG==2) {
+	if (DEBUG>=2) {
 		console.log("# Force Checks: ",numChecks);
 	}
 }
@@ -132,7 +255,7 @@ function step() {
 	leapfrog();
 
 	T += dt;
-	if (DEBUG==2) {
+	if (DEBUG>=2) {
 	    console.log("STEP");
 	}
 	refreshGraphics();
@@ -152,14 +275,14 @@ function leapfrog() {
 
 function updatePos(dt_step) {
 	// Update body positions based on velocities
-	for (i=0;i<bods.N;i++) {
+	for (var i=0;i<bods.N;i++) {
 		bods.pos.x[i] += bods.vel.x[i]*dt_step;
 		bods.pos.y[i] += bods.vel.y[i]*dt_step;
 	}
 }
 function updateVel(dt_step) {
 	// Update body velocities based on accelerations
-	for (i=0;i<bods.N;i++) {
+	for (var i=0;i<bods.N;i++) {
 		bods.vel.x[i] += bods.acc.x[i]*dt_step;
 		bods.vel.y[i] += bods.acc.y[i]*dt_step;
 	}

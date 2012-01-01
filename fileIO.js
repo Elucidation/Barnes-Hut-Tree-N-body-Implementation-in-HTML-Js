@@ -69,11 +69,10 @@ function errorHandler(evt) {
 
 function parseInputText(text) {
 	lines = text.split('\n');
-	for (i=0;i<lines.size;i++) {
+	for (var i=0;i<lines.size;i++) {
 		console.log(i,": ",lines[i]);
 	}
-	var jsObj = JSON.parse(text);
-	return jsObj;
+	return JSON.parse(text);
 }
 
 function loadSysFromJSON(jsonData) {
@@ -94,7 +93,7 @@ function loadSysFromJSON(jsonData) {
 	// Bodies
 	for (i=0;i<jsData.Bodies.N;i++) {
 		var b = jsData.Bodies.BodyData[i];
-		//addBody(x,y,vx,vy,m) {
+		//addBody(x,y,vx,vy,m)
 		addBody(b[1],b[2],b[3],b[4],b[0]);
 	}
 	refreshGraphics();

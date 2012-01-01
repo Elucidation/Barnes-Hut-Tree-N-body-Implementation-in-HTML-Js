@@ -1,3 +1,4 @@
+var DEBUGMAX = 4; // Levels of DEBUG
 
 // Arrow Length Multipliers
 drawArrows = false; // Button edit
@@ -9,7 +10,7 @@ arrowMult = 1;
 
 
 function toggleDEBUG() {
-	DEBUG = (DEBUG+1)%3; // 0 1 2
+	DEBUG = (DEBUG+1)%DEBUGMAX; // 0 1 2
 	console.log("DEBUG SET: ",DEBUG);
 }
 
@@ -33,6 +34,29 @@ function initGraphics(canvasId,dataId){
 }
 
 // Main Drawing --------------------------
+
+function drawBNtree() {
+	if (bnRoot) {drawBNnode(bnRoot)};
+}
+function drawBNnode(node) {
+	// If body in node
+	if ( typeof(node.b) != 'undefined' ) {
+		// Draw Node
+		drawBBOX(node.box[0],node.box[1],
+			node.box[2],node.box[3]);
+		c.textBaseline = 'top';
+		if (node.b != "PARENT") {
+			c.fillText('B:'+node.b,node.box[0],node.box[1])
+		}
+		// Draw Children
+		for (var i=0;i<4;i++){
+			var child = node.nodes[i];
+			//console.log("B",node.b,": C",i," ",child);
+
+			if (child) { drawBNnode( child ); }
+		}
+	}
+}
 
 
 // Updates text on html page
@@ -73,7 +97,7 @@ function refreshGraphics() {
 	com = {x:0,y:0}; // Center of mass of sys
 	var allMass = 0;
 
-	for(i=0;i<bods.N;i++){
+	for(var i=0;i<bods.N;i++){
 		drawCircle(bods.pos.x[i],bods.pos.y[i],massToRadius(bods.mass[i]));
 		// Velocity arrow (Green)
 		if (drawArrows) {
@@ -97,6 +121,9 @@ function refreshGraphics() {
 	com.y /= allMass;
 	drawCross(com.x,com.y);
 
+	// Draw BNtree
+	drawBNtree();
+
 	updateData();
 }
 
@@ -109,6 +136,9 @@ function massToRadius(mass) {
 }
 
 // Simple Shapes --------------------------
+function drawBBOX(x,y,x2,y2) {
+	drawBox(x,y,x2-x,y2-y);
+}
 function drawBox(x,y,w,h) {
 	c.strokeStyle = '#00f';
 	c.lineWidth = "1";
