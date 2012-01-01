@@ -13,6 +13,7 @@ function initGraphics(canvasId,dataId){
 	canvasElement = document.getElementById(canvasId);
 	c = canvasElement.getContext("2d");
 	data = document.getElementById(dataId);
+	timeDisp = document.getElementById('timeDisp');
 
 	//gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
 
@@ -26,6 +27,8 @@ function initGraphics(canvasId,dataId){
 
 // Updates text on html page
 function updateData() {
+	timeDisp.value = T.toFixed(2); // Update time output form
+
 	data.innerHTML = "";
 	if (sysRunning) {
 		data.innerHTML += ("System <b>Running</b>");

@@ -10,6 +10,7 @@ function initUI(canvasId){
 	if (DEBUG) {
 		console.log("Initialize UI complete.");
 	}
+	setDT(-2);
 }
 
 function mouseClick(e) {
@@ -116,4 +117,12 @@ function doKeyDown(evt){
 		// 	}
 		// 	break;
 	}
+}
+function setDT(v)
+{
+	dt = Math.pow(10,v);
+	if (DEBUG) {
+		console.log("DT SET: ",dt);
+	}
+	document.getElementById("dtSliderVal").innerHTML=dt.toFixed(4);
 }

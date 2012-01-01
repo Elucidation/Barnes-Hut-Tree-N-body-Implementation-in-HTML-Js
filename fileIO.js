@@ -23,7 +23,16 @@ function handleFileSelect(evt) {
 
 		reader.onload = function(e) {
 			var text = e.target.result;
-			jsData = parseInputText(text);
+			try {
+				jsData = parseInputText(text);
+			}
+			catch(e) {
+				ERROR = e; // For console access
+				alert('Couldn\'t Parse JSON from file : ',e.name,' : ',e.message);
+				console.log('ERROR parsing: ',e.name,' : ',e.message);
+				return -1;
+			}
+			
 			loadSysFromJSON(jsData);
 			if (DEBUG) {
 				console.log("JSON FILE LOADED: ",jsData.name)
@@ -66,7 +75,23 @@ function parseInputText(text) {
 	var jsObj = JSON.parse(text);
 	return jsObj;
 }
+
 function loadSysFromJSON(jsonData) {
+	// Constants
+	MINMASS = typeof(jsData.Constants.MINMASS) != 'undefined' ? jsData.Constants.MINMASS : MINMASS;
+	MAXMASS = typeof(jsData.Constants.MAXMASS) != 'undefined' ? jsData.Constants.MAXMASS : MAXMASS;
+	G = typeof(jsData.Constants.G) != 'undefined' ? jsData.Constants.G : G;
+	GFACTOR = typeof(jsData.Constants.GFACTOR) != 'undefined' ? jsData.Constants.GFACTOR : GFACTOR;
+	ETA = typeof(jsData.Constants.ETA) != 'undefined' ? jsData.Constants.ETA : ETA;
+	if (DEBUG) {
+		console.log('MINMASS: ',MINMASS);
+		console.log('MAXMASS: ',MAXMASS);
+		console.log('G: ',G);
+		console.log('GFACTOR: ',GFACTOR);
+		console.log('ETA: ',ETA);
+	}
+
+	// Bodies
 	for (i=0;i<jsData.Bodies.N;i++) {
 		var b = jsData.Bodies.BodyData[i];
 		//addBody(x,y,vx,vy,m) {

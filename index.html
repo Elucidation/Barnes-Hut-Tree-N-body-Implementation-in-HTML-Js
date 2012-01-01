@@ -17,10 +17,11 @@ Drag to set velocity of body<br/>
 Press e/d keys while dragging to change mass of body<br/>
 No collision checks
 </p>
-<div>
-<input type="file" id="fileInputs" name="files[]" />
-<output id="fileList"></output
-</div>
+<p><div>
+Load Input JSON File:<br/>
+<input type="file" id="fileInputs" name="files[]" accept="json"/>	
+<output id="fileList"></output>
+</div></p>
 
 <table>
 	<tr>
@@ -38,6 +39,9 @@ No collision checks
 			<div>
 			<table border=0>
 			<tr><td colspan=3 align="center">
+				<b> TIME: <output id="timeDisp">0.0</output></b>
+			</td></tr>
+			<tr><td colspan=3 align="center">
 				<b>DT: <span id="dtSliderVal">0.01</span></b>
 			</td></tr>
 			<tr>
@@ -46,14 +50,6 @@ No collision checks
 			<td>10</td>
 			</tr>
 			</table>
-			<script type="text/javascript">
-			setDT(-2);
-			function setDT(v)
-			{
-				dt = Math.pow(10,v);
-				document.getElementById("dtSliderVal").innerHTML=dt.toFixed(4);
-			}
-			</script>
 			</div>
 			<div id="data">Nothing here yet.</div>
 		</td>
