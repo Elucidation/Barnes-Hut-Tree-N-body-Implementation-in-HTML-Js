@@ -56,6 +56,7 @@ Efficiency vs Half Brute Force O(n^2) [499500] 93.50%
 ```
 
 With 10,005 Bodies
+
 ```
 # Bodies: 10005
 # Force calculations per step: 383004
