@@ -1,4 +1,7 @@
 ////////////
+var DEBUG = 0; // Extra info in console (0=Off,1=Low,2=Absurd, 3=BNtree)
+var DEBUGMAX = 5; // Levels of DEBUG
+
 var MINMASS = 1e2;
 var MAXMASS = 1e4;
 var G = 1; // Gravitational Constant
@@ -75,6 +78,7 @@ function addBody(x,y,vx,vy,m) {
 	if (bods.N >= 100 && DEBUG > 0) {
 		setDEBUG(0); // temp check to keep debug off when too many bodies
 	}
+	if (!sysRunning) {bnBuildTree();}
 }
 // BN Tree code ------
 var bnDepth=0, bnNumNodes=0, bnNumLeafs=0;

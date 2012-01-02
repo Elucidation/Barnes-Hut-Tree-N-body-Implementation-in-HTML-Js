@@ -11,17 +11,26 @@
 
 <body>
 <h2>Barnes-Hut Implementation in HTML/Javascript</h2>
-<p>Here it is.</p>
-<p>Click to place body<br/>
-Drag to set velocity of body<br/>
-Press e/d keys while dragging to change mass of body<br/>
-No collision checks, Bodies exert no gravitation when outside canvas area (but still get attracted back in).
+<p>A <a href="http://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation">Barnes-Hut Simulation</a> is an N-body simulation of gravitational interactions between point particles using the Barnes-Hut algorithm.</p>
+<p>Check out the <a href="https://github.com/Elucidation/Barnes-Hut-Tree-N-body-Implementation-in-HTML-Js">Source Code</a> on GitHub.</p>
+<p>
+<ul>
+	<li>Click to place body</li>
+	<li>Click-Drag to set velocity of body</li>
+	<li>No collision checks, Bodies exert no gravitation when outside canvas area (but still get attracted back in).</li>
+	<li>Press e/d keys while dragging to change mass of body</li>
+	<li>Press p to toggle system pause/run.</li>
+	<li>Press s to step system once by time step dt.</li>
+</ul>
 </p>
 <p><div>
 Load Input JSON File:<br/>
-<input type="file" id="fileInputs" name="files[]" accept="json"/>	
+<input type="file" id="fileInputs" name="files[]" accept="json"/> or <button type="button" onclick="addNrandomBodies(100)">Add 100 Random Bodies</button></br>
 <output id="fileList"></output>
-</div></p>
+
+</div>
+<br/>
+</p>
 
 <table>
 	<tr>
@@ -33,13 +42,13 @@ Load Input JSON File:<br/>
 			<div>
 				<table border=0>
 					<tr>					
-						<td><button type="button" onclick="toggleArrows()">Toggle Arrows On/Off</button></td>
+						<td><button type="button" onclick="toggleArrows()">Arrows On/Off</button></td>
+						<td><button type="button" onclick="toggleShowBNtree()">Show/Hide BN Tree</button></td>
 						<td><button type="button" onclick="toggleDEBUG()">Toggle Debug</button></td>
-						<td><button type="button" onclick="toggleShowBNtree()">Toggle Show/Hide BN Tree</button></td>
-						<td>( <b>LVL <span id="debugLVL">1</span></b> )</td>
+						<td>( <b>LVL <span id="debugLVL"></span></b> )</td>
 						<td>0</td>
-						<td><input id="debugSlider" type="range" min=0 max=4 value=1 step=1 onchange="setDEBUG(this.value)" /></td>
-						<td>4</td>
+						<td><input id="debugSlider" type="range" min=0 max=1 value=0 step=1 onchange="setDEBUG(this.value)" /></td>
+						<td>1</td>
 					</tr>
 				</table>
 			</div>
@@ -71,7 +80,6 @@ Load Input JSON File:<br/>
 </table>
 
 <script>
-DEBUG = 1; // Extra info in console (0=Off,1=Normal,2=Absurd, 3=BNtree)
 drawArrows = true;
 initBN("bnCanvas");
 initGraphics("bnCanvas","data");

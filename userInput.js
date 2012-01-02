@@ -1,5 +1,4 @@
-// User Input
-
+// User Input Stuff
 // Introduce new body to system at mouse position
 function initUI(canvasId){
 	canvasElement = document.getElementById(canvasId);
@@ -148,6 +147,7 @@ function toggleArrows() {
 function toggleShowBNtree() {
 	SHOW_BN_TREE = !SHOW_BN_TREE;
 	console.log("SHOW BN TREE : ",SHOW_BN_TREE);
+	if (!sysRunning) {bnBuildTree();}
 	refreshGraphics();
 }
 

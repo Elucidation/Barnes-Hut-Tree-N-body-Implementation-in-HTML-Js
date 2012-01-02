@@ -1,8 +1,7 @@
-var DEBUGMAX = 5; // Levels of DEBUG
-
 // Arrow Length Multipliers
 drawArrows = false; // Button edit
-arrowLengthRatio = 5;
+arrowLengthRatio = 2;
+ARROWHEADSIZE = 5;
 
 // Circle Sizes
 var MINRADIUS = 1;
@@ -184,7 +183,7 @@ function drawCircle(x,y,r) {
 // x,y start to x2,y2 end
 // h = Arrow Head size
 function drawArrow(x,y,x2,y2,h,color) {
-	h = (typeof(h) != 'undefined' && h != '') ? h : 10; // Default h
+	h = (typeof(h) != 'undefined' && h != '') ? h : ARROWHEADSIZE; // Default h
 	color = typeof(color) != 'undefined' ? color : '#0f0'; // Default color
 
 	// Resize arrow based on arrowLengthRatio
