@@ -23,9 +23,11 @@ With Brute force : `O(n^2)` calculations (exactly `(N-1)*N/2` actually), roughly
 With Barnes-Hut tree calcualtions, it'll be `O(nlogn)`.
 
 With a low number of bodies N < 50 or so, a slightly streamlined brute force is more efficient than a Barnes-Hut tree, but
-as N increases, the efficiency increases dramatically (90-99%).
+as N increases, the efficiency increases dramatically:
+With Theta = 0.5, roughly 50% gain for N < 500, 80% for N < 1000, reaching up to 90% beyond.
 
 With 10k bodies it takes around 0.5~0.8 seconds to compute a step, and 0.1-0.3 seconds to display it on the canvas.
+
 
 How `index.html` looks:
 
@@ -40,6 +42,8 @@ Barnes-Hut calculation implemented and working. Real-time for N > 1k etc.
 
 Efficiency information is shown in real-time to the right of the canvas.
 
+
+Following examples testing with Theta=1 (not accurate)
 Example with 1,000 bodies.
 
 ```

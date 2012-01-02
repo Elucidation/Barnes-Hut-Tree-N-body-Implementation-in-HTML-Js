@@ -2,19 +2,30 @@
 var DEBUG = 0; // Extra info in console (0=Off,1=Low,2=Absurd, 3=BNtree)
 var DEBUGMAX = 5; // Levels of DEBUG
 
+// Reality
+// var MINMASS = 1e20;
+// var MAXMASS = 1e30;
+// var G = 6.673e-11; // Gravitational Constant
+// var ETA = 0.01; // Softening constant
+// var GFACTOR = 1.3; // Higher means distance has more effect (3 is reality)
+// var dt; // Global DT set by html
+// var MAXDEPTH = 50; // BN tree max depth ( one less than actual, example with maxdepth = 2, the levels are [0 1 2] )
+// var BN_THETA = 0.5;
+// var DISTANCE_MULTIPLE = 1e9; // # meters per pixel (ex 1, 1 meter per pixel)
+// 1e3 = km, 1e6 = Mm, 1e9 = Gm, 149.60e9 = Au, 9.461e15 = LightYear, 30.857e15 = Parsec
 var MINMASS = 1e2;
-var MAXMASS = 1e4;
-var G = 1; // Gravitational Constant
+var MAXMASS = 1e10;
+var G = 1e-5; // Gravitational Constant
 var ETA = 10; // Softening constant
 var GFACTOR = 1.3; // Higher means distance has more effect (3 is reality)
-var dt; // Global DT set by html
-var MAXDEPTH = 50; // BN tree max depth ( one less than actual, example with maxdepth = 2, the levels are [0 1 2] )
-var BN_THETA = 1;
+
+var DISTANCE_MULTIPLE = 2;
+
 var INTERACTION_METHOD = "BN"; // BN or BRUTE, type of tree search to use
-var DISTANCE_MULTIPLE = 1; // # meters per pixel (ex 1, 1 meter per pixel)
-// 1e3 = km, 1e6 = Mm, 1e9 = Gm, 149.60e9 = Au, 9.461e15 = LightYear, 30.857e15 = Parsec
+var MAXDEPTH = 50; // BN tree max depth ( one less than actual, example with maxdepth = 2, the levels are [0 1 2] )
+var BN_THETA = 0.5;
 
-
+var dt; // Global DT set by html
 // Bodies struct containing all bodies
 var bods;
 
@@ -265,7 +276,7 @@ function doBNtreeRecurse(bI,node) {
 	else {
 		var s = Math.min( node.box[2]-node.box[0] , node.box[3]-node.box[1] ); // Biggest side of box
 		var d = getDist(bods.pos.x[bI],bods.pos.y[bI],
-			node.CoM[1],node.CoM[2]) * DISTANCE_MULTIPLE;
+			node.CoM[1],node.CoM[2]);
 		if (s/d < BN_THETA) {
 			setAccelDirect(bI,node.CoM[0],node.CoM[1],node.CoM[2])
 			numChecks += 1;
@@ -341,7 +352,7 @@ function getForceVecDirect(m,x,y,m2,x2,y2) {
 	// bods[i] and bods[j], an adds to bods[i]
 	var dx = x2-x;
 	var dy = y2-y;
-	var r = Math.sqrt(dx*dx+dy*dy)+ETA;
+	var r = (getDist(x,y,x2,y2)+ETA) * DISTANCE_MULTIPLE;
 	// F_{x|y} = d_{x|y}/r * G*M*m/r.^3;
 	var F = G*m*m2/Math.pow(r,GFACTOR);
 
