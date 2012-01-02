@@ -1,0 +1,14 @@
+{
+	"name":"reality",
+	"Constants": {
+		"MINMASS": 1e20,
+		"MAXMASS": 1e30,
+		"G": 6.673e-11,
+		"ETA": 0.1,
+		"GFACTOR": 3
+	},
+	"Bodies": {
+		"N": 0,
+		"BodyData": []
+	}
+}

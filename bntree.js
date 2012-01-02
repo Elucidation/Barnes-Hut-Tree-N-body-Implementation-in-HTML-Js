@@ -11,6 +11,8 @@ var dt; // Global DT set by html
 var MAXDEPTH = 50; // BN tree max depth ( one less than actual, example with maxdepth = 2, the levels are [0 1 2] )
 var BN_THETA = 1;
 var INTERACTION_METHOD = "BN"; // BN or BRUTE, type of tree search to use
+var DISTANCE_MULTIPLE = 1; // # meters per pixel (ex 1, 1 meter per pixel)
+// 1e3 = km, 1e6 = Mm, 1e9 = Gm, 149.60e9 = Au, 9.461e15 = LightYear, 30.857e15 = Parsec
 
 
 // Bodies struct containing all bodies
@@ -263,7 +265,7 @@ function doBNtreeRecurse(bI,node) {
 	else {
 		var s = Math.min( node.box[2]-node.box[0] , node.box[3]-node.box[1] ); // Biggest side of box
 		var d = getDist(bods.pos.x[bI],bods.pos.y[bI],
-			node.CoM[1],node.CoM[2]);
+			node.CoM[1],node.CoM[2]) * DISTANCE_MULTIPLE;
 		if (s/d < BN_THETA) {
 			setAccelDirect(bI,node.CoM[0],node.CoM[1],node.CoM[2])
 			numChecks += 1;
