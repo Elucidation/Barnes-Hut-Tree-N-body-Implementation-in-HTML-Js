@@ -23,6 +23,7 @@ function initGraphics(canvasId,dataId){
 	c = canvasElement.getContext("2d");
 	data = document.getElementById(dataId);
 	timeDisp = document.getElementById('timeDisp');
+	bodyCounter = document.getElementById('bodyCount');
 
 	//gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
 
@@ -44,7 +45,7 @@ function drawBNnode(node,depth) {
 			node.box[2],node.box[3]);
 		c.textBaseline = 'top';
 		
-		if(DEBUG >= 4) {
+		if(DEBUG >= 1) {
 			// Draw Center of Mass
 			c.strokeStyle = '#f00';
 			c.lineWidth = "0.5";
@@ -70,28 +71,41 @@ function drawBNnode(node,depth) {
 // Updates text on html page
 function updateData() {
 	timeDisp.value = T.toFixed(2); // Update time output form
+	var bruteHalfChecks = bods.N*(bods.N-1)/2; // what efficient Brute Force checks would be
+	bodyCounter.innerHTML = bods.N;
 
-	data.innerHTML = "";
-	if (sysRunning) {
-		data.innerHTML += ("System <b>Running</b>");
-	} 
-	else {
-		data.innerHTML += ("System <b>Stopped/Paused</b>");
-	}
-	data.innerHTML += "<br>\n";
-	data.innerHTML += "# Bodies: "+bods.N+"<br/>\n";
-	data.innerHTML += "# Force calculations per step: "+numChecks+"<br/>\n";
+	data.innerHTML = "<p><b>System "+(sysRunning?"Running":"Paused")+"</b><br/>\n\
+		Bodies: "+bods.N+"<br/>\n\
+		Force calculations per step: "+numChecks+"<br/>\n\
+		</p>";
+
 	if (INTERACTION_METHOD=="BN") {
-		data.innerHTML += "BN TREE - Depth: "+bnDepth+", # Nodes: "+bnNumNodes+", # Leafs: "+bnNumLeafs+"</br>\n";
-		var bruteChecks = bods.N*bods.N;
-		var bruteHalfChecks = bods.N*(bods.N-1)/2;
-		data.innerHTML += "BN Tree O(nlogn) ["+numChecks+"]</br>\n";
-		data.innerHTML += "Efficiency vs Brute Force O(n^2) ["+bruteChecks+"] <b>"+(100-100*numChecks/bruteChecks).toFixed(2)+"%</b></br>\n";
-		data.innerHTML += "Efficiency vs Half Brute Force O(n^2) ["+bruteHalfChecks+"] <b>"+(100-100*numChecks/bruteHalfChecks).toFixed(2)+"%</b></br>\n";
-		data.innerHTML += "Time to compute step : "+stepTime+"ms<br/>\n";
-		data.innerHTML += "Time to display step : "+displayStepTime+"ms<br/>\n";
+		data.innerHTML += "\n\
+			<p>\n\
+			<b>BN Tree</b>\n\
+			Depth: "+bnDepth+"<br/>\n\
+			Nodes: "+bnNumNodes+"<br/>\n\
+			Leafs: "+bnNumLeafs+"<br/>\n\
+			</p>\n\
+			<p>\n\
+			<b>Number of Calculations</b><br/>\n\
+			BN Tree: "+numChecks+"<br/>\n\
+			Brute Force: "+bruteHalfChecks+"<br/>\n\
+			</p>\n\
+			<p>\n\
+			Speedup : "+(100*(1-numChecks/bruteHalfChecks)).toFixed(2)+"%<br/>\n\
+			</p>"
 	}
-	if (DEBUG) {
+
+		data.innerHTML += "\n\
+			<p>\n\
+			<b>Time per step</b><br/>\n\
+			Compute : "+stepTime+"ms<br/>\n\
+			Display : "+displayStepTime+"6ms<br/>\n\
+			</p>";
+
+	
+	if (DEBUG>=1) {
 		data.innerHTML += "<ul>";
 		var i;
 		for(i=0;i<bods.N;i++){

@@ -1,8 +1,82 @@
 canvas {
 	border-style:solid;
 	border-width:1px;
+	background:white;
 }
 
 td {
 	vertical-align:top;
+	padding: 5px;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: smaller;
+    padding: 50px;
+    color: #555;
+    width: 650px;
+}
+
+h1 {
+    letter-spacing: 6px;
+    font-size: 1.6em;
+    color: #be7429;
+    font-weight: bold;
+}
+
+h2 {
+    text-align: left;
+    letter-spacing: 6px;
+    font-size: 1.4em;
+    color: #be7429;
+    font-weight: normal;
+    width: 450px;
+}
+
+table {
+    padding: 1px;
+    background-color: #eff0ef;
+    -moz-border-radius: 5px;
+    border-radius: 10px;
+}
+tbody {
+    vertical-align: top;
+}
+
+a {
+    color: #be7429;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+code {
+    font-family: monospace;
+    color: #666666;
+}
+
+smallNote {
+    font-size: 0.9em;
+    font-family: sans-serif;
+}
+
+li {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+normalText {
+    
+}
+normalText:hover {
+    border-bottom-style: dotted;
+    border-bottom-color: #ffcc33;
+    color: #ab6f00;
+}
+
+input:focus {
+    background-color: #fbf5c0;
 }
