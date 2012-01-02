@@ -4,6 +4,15 @@ canvas {
 	background:white;
 }
 
+div {
+	padding: 1px;
+	-moz-border-radius: 5px;
+    border-radius: 5px;
+	-moz-box-shadow:    1px 1px 2px 0px #ccc;
+	-webkit-box-shadow: 1px 1px 2px 0px #ccc;
+	box-shadow:         1px 1px 2px 0px #ccc;
+}
+
 td {
 	vertical-align:top;
 	padding: 5px;
@@ -36,7 +45,7 @@ h2 {
 table {
     padding: 1px;
     background-color: #eff0ef;
-    -moz-border-radius: 5px;
+    -moz-border-radius: 10px;
     border-radius: 10px;
 }
 tbody {

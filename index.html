@@ -18,7 +18,7 @@
 		<td colspan=2>
 			<div>
 			<button type="button" onclick="addNrandomBodies(100)">Add 100 Random Bodies</button>
-			or Load Input JSON File:<input type="file" id="fileInputs" name="files[]" accept="json"/></br>
+			or Choose JSON Input File<input type="file" id="fileInputs" name="files[]" accept="json" /></br>
 			<output id="fileList"></output>
 			</div>
 		</td>
@@ -32,10 +32,10 @@
 			<div>
 				<table border=0>
 					<tr>					
-						<td><button type="button" onclick="toggleArrows()">Arrows On/Off</button></td>
-						<td><button type="button" onclick="toggleShowBNtree()">Show/Hide BN Tree</button></td>
-						<td><button type="button" onclick="toggleDEBUG()">Toggle Debug</button></td>
-						<td><center><b>LVL<span id="debugLVL"></span></b></center></td>
+						<td><button type="button" onclick="toggleArrows()">Arrows Toggle</button></td>
+						<td><button type="button" onclick="toggleShowBNtree()">BN Tree Show/Hide</button></td>
+						<td><button type="button" onclick="toggleDEBUG()">Debug Toggle</button></td>
+						<td><center><b>DEBUG <span id="debugLVL"></span></b></center></td>
 						<td>0</td>
 						<td><input id="debugSlider" type="range" min=0 max=1 value=0 step=1 onchange="setDEBUG(this.value)" /></td>
 						<td>1</td>
@@ -48,10 +48,8 @@
 				<button type="button" onclick="resetSys()">Reset</button>
 				<button type="button" onclick="startSys()">Start</button>
 				<button type="button" onclick="pauseSys()">Stop/Pause</button>
-			</div>
-			<div>
 				<table border=0>
-					<tr><td colspan=3 align="center">
+					<tr><td colspan=3>
 						Bodies: <b><output id="bodyCount">0</output></b><br/>
 						TIME: <b><output id="timeDisp">0.0</output></b><br/>
 						DT: <b><span id="dtSliderVal">0.01</span></b>
@@ -68,7 +66,7 @@
 				</table>
 			</div>
 			<code>
-				<div id="data">Nothing here yet.</div>
+				<div id="data"><b>Quick Start:</b><br/>- Add some bodies<br/>- Press <b>Start</b></div>
 			</code>
 		</td>
 	</tr>
@@ -87,7 +85,7 @@
 <p>Check out the <a href="https://github.com/Elucidation/Barnes-Hut-Tree-N-body-Implementation-in-HTML-Js">Source Code</a> on GitHub.</p>
 
 <script>
-drawArrows = true;
+drawArrows = false;
 initBN("bnCanvas");
 initGraphics("bnCanvas","data");
 initUI("bnCanvas");
