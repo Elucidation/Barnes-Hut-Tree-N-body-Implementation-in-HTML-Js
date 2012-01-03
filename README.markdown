@@ -59,6 +59,23 @@ Efficiency vs Brute Force O(n^2) [1000000] 96.75%
 Efficiency vs Half Brute Force O(n^2) [499500] 93.50%
 ```
 
+With 5,000 Bodies
+
+```
+Bodies: 5000
+Force calculations per step: 623195
+BN Tree Depth: 13
+Nodes: 8681
+Leafs: 4979
+Number of Calculations
+BN Tree: 623195
+Brute Force: 12497500
+Speedup : 95.01%
+Time per step
+Compute : 752ms
+Display : 636ms
+```
+
 With 10,005 Bodies
 
 ```
@@ -71,5 +88,3 @@ Efficiency vs Half Brute Force O(n^2) [50045010] 99.23%
 Time to compute step : 615ms
 Time to display step : 156ms
 ```
-
-Next step, build quad-tree from bodies as in [LearnHTML5](https://github.com/Elucidation/LearnHTML5) repo.
