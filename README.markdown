@@ -31,6 +31,10 @@ With 10k bodies it takes around 0.5~0.8 seconds to compute a step, and 0.1-0.3 s
 
 How `index.html` looks:
 
+![Live demo screenshot](http://i.imgur.com/W0jO4.png)
+
+Debug using the console (older image):
+
 ![How index.html looks in a browswer](http://i.imgur.com/NJEvM.png)
 
 Status
