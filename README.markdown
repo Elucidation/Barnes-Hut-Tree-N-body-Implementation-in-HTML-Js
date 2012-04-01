@@ -5,11 +5,11 @@ A [Barnes-Hut Simulation](http://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simula
 
 [Try it out](http://www.prism.gatech.edu/~gth716h/BNtree/)
 
-This simulator shows for an arbitrary amount of bodies/points (tested up to 100k particles, see below) in a 2d field:
+This simulator runs a simulation of the gravitational interactions between an arbitrary amount of bodies/points (tested up to 100k particles, see below) in a 2D field:
 
 ![Clear image 1k bodies](http://i.imgur.com/tygCK.png)
 
-A Barnes-Hut Tree sub-divides the space by quadrants:
+A Barnes-Hut Tree sub-divides the space by quadrants, providing a large speed-up by approximating particle interactions at long distances:
 
 ![BN Tree image 1k bodies](http://i.imgur.com/f7OI0.png)
 
