@@ -5,7 +5,7 @@ A [Barnes-Hut Simulation](http://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simula
 
 [Try it out](http://www.prism.gatech.edu/~gth716h/BNtree/)
 
-This simulator shows for an arbitrary amount of bodies/points in a 2d field:
+This simulator shows for an arbitrary amount of bodies/points (tested up to 100k particles, see below) in a 2d field:
 
 ![Clear image 1k bodies](http://i.imgur.com/tygCK.png)
 
@@ -88,6 +88,10 @@ Efficiency vs Half Brute Force O(n^2) [50045010] 99.23%
 Time to compute step : 615ms
 Time to display step : 156ms
 ```
+
+And just for fun, 100,000 Bodies:
+![100k Particles](http://i.imgur.com/q7wAW.png)
+
 ---
 
 Copyright (c) 2012, Sameer Ansari - elucidation@gmail.com
