@@ -302,7 +302,7 @@ function doBNtreeRecurse(bI,node) {
 		}
 	}
 	else {
-		var s = Math.min( node.box[2]-node.box[0] , node.box[3]-node.box[1] ); // Biggest side of box
+		var s = Math.max( node.box[2]-node.box[0] , node.box[3]-node.box[1] ); // Biggest side of box
 		var d = getDist(bods.pos.x[bI],bods.pos.y[bI],
 			node.CoM[1],node.CoM[2]);
 		if (s/d < BN_THETA) {
