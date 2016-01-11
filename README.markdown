@@ -3,7 +3,7 @@ Barnes-Hut N-body Simulation in HTML/Javascript
 
 A [Barnes-Hut Simulation](http://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation) is an N-body simulation of gravitational interactions between point particles using the Barnes-Hut algorithm.
 
-[Try it out](http://www.andrew.cmu.edu/user/sameera/demos/BNtree/)
+[Try it out](http://elucidation.github.io/Barnes-Hut-Tree-N-body-Implementation-in-HTML-Js/)
 
 This simulator runs a simulation of the gravitational interactions between an arbitrary amount of bodies/points (tested up to 100k particles, see below) in a 2D field:
 
