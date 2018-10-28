@@ -111,6 +111,7 @@ function updateData() {
 		for(i=0;i<bods.N;i++){
 			data.innerHTML += "<li> B"+i+" : Pos "+
 				bods.pos.x[i].toFixed(2)+", "+bods.pos.y[i].toFixed(2)+
+				"; M: " + bods.mass[i] +
 				" </li>";
 		}
 		data.innerHTML += "</ul>";
