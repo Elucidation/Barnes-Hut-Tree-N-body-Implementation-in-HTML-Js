@@ -473,10 +473,13 @@ function updateVel(dt_step) {
 	}
 }
 
-
+// System and Graphics interval timers
 var sysTimer;
+var gfxTimer;
 var sysRunning = false;
 function startSys() {
+	clearInterval(sysTimer);
+	clearInterval(gfxTimer);
 	sysTimer = setInterval(step,10);
 	gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
 	sysRunning = true;

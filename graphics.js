@@ -14,8 +14,6 @@ var BN_DRAW_TEXT_DEPTH = 4; // Depth to draw text of node bbox
 
 // Canvas Context
 var c;
-// Graphics refresh timer
-var gfxTimer=0;
 var displayStepTime;
 
 function initGraphics(canvasId,dataId){
@@ -24,8 +22,6 @@ function initGraphics(canvasId,dataId){
 	data = document.getElementById(dataId);
 	timeDisp = document.getElementById('timeDisp');
 	bodyCounter = document.getElementById('bodyCount');
-
-	//gfxTimer = setInterval(refreshGraphics,1/60.0*1000);
 
 	if (DEBUG) {
 		console.log('Initialize Graphics complete.');
