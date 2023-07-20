@@ -416,7 +416,6 @@ function doForces() {
 			forceBrute();
 			break;
 		case "BN":
-			bnBuildTree(); // REMOVE WHEN doing forceBNtree!
 			forceBNtree();
 			break;
 	}
